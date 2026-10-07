@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('0rhx_lang');
+        var lang = (saved && ['zh', 'en', 'ja'].indexOf(saved) !== -1) ? saved : null;
+        if (!lang) {
+          var navLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+          if (navLang.indexOf('zh') === 0) lang = 'zh';
+          else if (navLang.indexOf('ja') === 0) lang = 'ja';
+          else lang = 'en';
+        }
+        window.__INITIAL_LANG__ = lang;
+        document.documentElement.lang = (lang === 'zh' ? 'zh-CN' : (lang === 'ja' ? 'ja' : 'en'));
+        document.documentElement.setAttribute('data-lang', lang);
+
+        // Immediate Theme initialization to prevent theme flashing
+        var savedTheme = localStorage.getItem('0rhx_theme');
+        if (savedTheme === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else {
+          document.documentElement.classList.add('dark');
+        }
+
+        // Base static HTML is in English. Only conceal for non-English users while translating
+        if (lang !== 'en') {
+          document.documentElement.classList.add('i18n-pending');
+          if (lang === 'zh') {
+            document.title = "0rhxPlayer - 轻量本地音乐播放器 (Desktop & VSCode)";
+          } else if (lang === 'ja') {
+            document.title = "0rhxPlayer - 軽量ローカル音楽プレーヤー (Desktop & VSCode)";
+          }
+        }
+
+        // Safety fallback watchdog to guarantee page visibility
+        setTimeout(function() {
+          document.documentElement.classList.remove('i18n-pending');
+        }, 350);
+      } catch (e) {}
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title id="pageTitle">0rhxPlayer - Lightweight Local Music Player (Desktop & VSCode)</title>
+  <meta name="description" content="0rhxPlayer is a lightweight local music player crafted with Material 3 design, supporting Windows / Linux desktop and VSCode." />
+  <meta name="keywords" content="0rhxPlayer, Music Player, Local Music, Material You, Tauri, Rust, Qt, VSCode Extension, RinCynar" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="icon.png" type="image/png" />
+
+  <!-- Google Fonts: Google Sans Flex & Noto Sans SC & Noto Sans JP & Noto Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================
+       0rhxPlayer Official Landing Page - Material 3 Design
+       ========================================================== */
+    /* Prevent flash of untranslated content (FOCC) */
+    html.i18n-pending body {
+      visibility: hidden !important;
+      opacity: 0 !important;
+    }
+
+    :root {
+      --bg: #F6F2F8;
+      --bg-elevated: #EDE7F0;
+      --header-bg: rgba(246, 242, 248, 0.88);
+      --surface: #FFFFFF;
+      --surface-border: rgba(0, 0, 0, 0.08);
+      --surface-hover: rgba(0, 0, 0, 0.04);
+      --text-main: #1D1B20;
+      --text-muted: #65636D;
+      --text-sub: #8B8794;
+      --primary: #006A6B;
+      --primary-hover: #005657;
+      --primary-on: #FFFFFF;
+      --primary-container: rgba(0, 106, 107, 0.12);
+      --miku: #39C5BB;
+      --tonal-bg: rgba(0, 106, 107, 0.08);
+      --tonal-text: #006A6B;
+      --tonal-border: rgba(0, 106, 107, 0.18);
+      --accent-blue: #0284C7;
+      --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+      --font-brand: 'Google Sans Flex', 'Google Sans', 'Noto Sans', sans-serif;
+      --font: 'Noto Sans', 'Noto Sans SC', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    html.dark {
+      --bg: #131317;
+      --bg-elevated: #1A1921;
+      --header-bg: rgba(19, 19, 23, 0.88);
+      --surface: #1E1D24;
+      --surface-border: rgba(255, 255, 255, 0.08);
+      --surface-hover: rgba(255, 255, 255, 0.05);
+      --text-main: #E6E1E5;
+      --text-muted: #A19DA8;
+      --text-sub: #75717E;
+      --primary: #39C5BB;
+      --primary-hover: #4FE1D7;
+      --primary-on: #003738;
+      --primary-container: rgba(57, 197, 187, 0.15);
+      --miku: #39C5BB;
+      --tonal-bg: rgba(255, 255, 255, 0.06);
+      --tonal-text: #E6E1E5;
+      --tonal-border: rgba(255, 255, 255, 0.1);
+      --accent-blue: #38BDF8;
+      --card-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.45), 0 4px 16px -2px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      padding-top: 68px; /* Safe offset for fixed header */
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Container & Main Centering */
+    main {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      padding-left: 24px;
+      padding-right: 24px;
+      box-sizing: border-box;
+    }
+
+    /* Header - Responsive Full-Width Fixed Navbar */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 1000;
+      background-color: var(--header-bg);
+      border-bottom: 1px solid var(--surface-border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--primary-container);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-family: var(--font-brand);
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .brand-tag {
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--text-sub);
+      display: block;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      transition: color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-link:hover {
+      color: var(--primary);
+    }
+
+    /* Controls: Lang Selector & Theme Switcher */
+    .controls-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .select-btn {
+      height: 36px;
+      padding: 0 10px;
+      border-radius: 9999px;
+      border: 1px solid var(--surface-border);
+      background: var(--surface);
+      color: var(--text-main);
+      font-size: 0.775rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+      outline: none;
+    }
+
+    .select-btn:hover {
+      border-color: var(--primary);
+      background: var(--surface-hover);
+    }
+
+    .theme-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--surface-border);
+      background: var(--surface);
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .theme-btn:hover {
+      background: var(--surface-hover);
+      border-color: var(--primary);
+    }
+
+    .github-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--surface-border);
+      background: var(--surface);
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .github-btn:hover {
+      background: var(--surface-hover);
+      border-color: var(--primary);
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      padding: 56px 0 40px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 480px;
+      height: 480px;
+      max-width: 90vw;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(57, 197, 187, 0.18) 0%, rgba(57, 197, 187, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: var(--primary-container);
+      color: var(--primary);
+      margin-bottom: 20px;
+      max-width: 100%;
+      text-align: center;
+    }
+
+    .status-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 18px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(249, 115, 22, 0.12);
+      color: #EA580C;
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      margin-bottom: 16px;
+      max-width: 100%;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(249, 115, 22, 0.08);
+      transition: all 0.25s ease;
+    }
+
+    html.dark .status-banner {
+      background: rgba(249, 115, 22, 0.18);
+      color: #FB923C;
+      border-color: rgba(249, 115, 22, 0.35);
+      box-shadow: 0 4px 16px rgba(249, 115, 22, 0.15);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #F97316;
+      box-shadow: 0 0 8px #F97316;
+      animation: status-pulse 2s infinite ease-in-out;
+      flex-shrink: 0;
+    }
+
+    html.dark .status-dot {
+      background: #FB923C;
+      box-shadow: 0 0 8px #FB923C;
+    }
+
+    @keyframes status-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.8); }
+    }
+
+    .tag-badge-status {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: rgba(249, 115, 22, 0.14);
+      color: #EA580C;
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    html.dark .tag-badge-status {
+      background: rgba(249, 115, 22, 0.2);
+      color: #FB923C;
+      border-color: rgba(249, 115, 22, 0.35);
+    }
+
+    .hero h1 {
+      font-size: 2.85rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 18px;
+    }
+
+    .highlight-text {
+      background: linear-gradient(135deg, #006A6B 0%, #39C5BB 50%, #83F5ED 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    html.dark .highlight-text {
+      background: linear-gradient(135deg, #39C5BB 0%, #70F7EC 60%, #B6FAF4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 660px;
+      margin: 0 auto 30px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 26px;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+      border: 1px solid transparent;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--primary-on);
+      box-shadow: 0 4px 14px rgba(57, 197, 187, 0.25);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.92;
+      transform: translateY(-2px);
+    }
+
+    .btn-tonal {
+      background: var(--tonal-bg);
+      color: var(--tonal-text);
+      border-color: var(--tonal-border);
+    }
+
+    .btn-tonal:hover {
+      background: var(--surface-hover);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: var(--surface);
+      color: var(--text-main);
+      border-color: var(--surface-border);
+    }
+
+    .btn-outline:hover {
+      background: var(--surface-hover);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    /* Section Title Standard Centering */
+    .section-title {
+      text-align: center;
+      margin-bottom: 36px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .section-title h2 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .section-title p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      text-align: center;
+      width: 100%;
+    }
+
+    /* Mirror Selector Switch */
+    .mirror-selector-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 30px;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .mirror-selector {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 10px 6px 16px;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 9999px;
+      box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.05);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .mirror-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .mirror-options {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg-elevated);
+      padding: 3px;
+      border-radius: 9999px;
+    }
+
+    .mirror-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.775rem;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.05, 0.7, 0.1, 1.0);
+      font-family: inherit;
+    }
+
+    .mirror-btn:hover {
+      color: var(--text-main);
+    }
+
+    .mirror-btn.active {
+      background: var(--primary);
+      color: var(--primary-on);
+      box-shadow: 0 2px 8px rgba(0, 106, 107, 0.28);
+    }
+
+    html.dark .mirror-btn.active {
+      background: var(--primary);
+      color: var(--primary-on);
+      box-shadow: 0 2px 10px rgba(57, 197, 187, 0.35);
+    }
+
+    .mirror-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      display: inline-block;
+      animation: status-pulse 2s infinite ease-in-out;
+    }
+
+    .mirror-hint {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--tonal-bg);
+      border: 1px solid var(--tonal-border);
+      padding: 4px 14px;
+      border-radius: 9999px;
+      max-width: 92%;
+    }
+
+    .download-mirror-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.725rem;
+      color: var(--text-sub);
+      margin-bottom: 12px;
+      padding: 5px 12px;
+      background: var(--surface-hover);
+      border-radius: 10px;
+    }
+
+    /* Downloads Matrix - Equal Height & 2x2 Clean Grid */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 32px;
+      align-items: stretch;
+      margin-bottom: 56px;
+      width: 100%;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 28px;
+      padding: 32px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+      box-sizing: border-box;
+    }
+
+    .card:hover {
+      border-color: rgba(57, 197, 187, 0.4);
+    }
+
+    .card-top {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .card-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: var(--primary-container);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-brand h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .card-brand p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .tag-badge {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: var(--primary-container);
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .card-body {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      background: var(--bg-elevated);
+      padding: 18px 20px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+      line-height: 1.7;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 140px;
+    }
+
+    .card-body ul {
+      list-style: none;
+    }
+
+    .card-body li {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+
+    .card-body li::before {
+      content: "•";
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .card-bottom {
+      margin-top: auto;
+      border-top: 1px solid var(--surface-border);
+      padding-top: 20px;
+      width: 100%;
+    }
+
+    .download-grid-2x2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .btn-m3 {
+      height: 46px;
+      padding: 0 16px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      border-radius: 16px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      white-space: nowrap;
+      box-sizing: border-box;
+    }
+
+    /* Screenshots Showcase - Global Centering & Breathing M3 Layout */
+    #screenshots, .screenshots-section {
+      width: 100%;
+      max-width: 1200px;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      padding-left: 24px;
+      padding-right: 24px;
+      margin-top: 56px;
+      margin-bottom: 72px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+
+    .screenshots-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      width: 100%;
+      align-items: stretch;
+      box-sizing: border-box;
+    }
+
+    .screenshot-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 28px;
+      padding: 12px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .screenshot-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.4);
+      border-color: rgba(57, 197, 187, 0.4);
+    }
+
+    .screenshot-frame {
+      width: 100%;
+      aspect-ratio: 2364 / 1620;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--surface-border);
+      background: #131317;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .screenshot-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .screenshot-caption {
+      text-align: center;
+      padding: 6px 12px 12px;
+      min-height: 52px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .screenshot-caption h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .screenshot-caption p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Features 3-Cols */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 72px;
+      width: 100%;
+    }
+
+    .feature-box {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s;
+      box-sizing: border-box;
+    }
+
+    .feature-box:hover {
+      transform: translateY(-2px);
+    }
+
+    .feature-icon-wrapper {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      background: var(--primary-container);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .feature-box h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .feature-box p {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--surface-border);
+      padding: 40px 0;
+      text-align: center;
+      font-size: 0.825rem;
+      color: var(--text-sub);
+      width: 100%;
+    }
+
+    footer a {
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    footer a:hover {
+      color: var(--primary);
+    }
+
+    /* Responsive Breakdown */
+    @media (max-width: 900px) {
+      .hero h1 {
+        font-size: 2.3rem;
+      }
+      .screenshots-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .card-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding-top: 64px;
+      }
+      .header-inner {
+        height: 64px;
+        padding: 0 16px;
+      }
+      .brand-tag {
+        display: none;
+      }
+      .nav-links .hide-mobile {
+        display: none;
+      }
+      .hero {
+        padding: 40px 0 28px;
+      }
+      .hero h1 {
+        font-size: 1.85rem;
+        margin-bottom: 14px;
+      }
+      .hero p {
+        font-size: 0.925rem;
+        margin-bottom: 24px;
+      }
+      .hero-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+      .hero-actions .btn {
+        width: 100%;
+      }
+      .container {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+      .card {
+        padding: 24px 18px;
+        border-radius: 24px;
+      }
+      .card-body {
+        padding: 16px 14px;
+        font-size: 0.8rem;
+      }
+      .download-grid-2x2 {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .download-grid-2x2 a[style*="grid-column: span 2"] {
+        grid-column: span 1 !important;
+      }
+      .btn-m3 {
+        height: 44px;
+        font-size: 0.8rem;
+      }
+      #screenshots, .screenshots-section {
+        padding-left: 16px;
+        padding-right: 16px;
+        margin-top: 40px;
+        margin-bottom: 56px;
+      }
+      .screenshot-card {
+        padding: 10px;
+        border-radius: 20px;
+      }
+      .screenshot-frame {
+        border-radius: 14px;
+      }
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 56px;
+      }
+      .feature-box {
+        padding: 20px 18px;
+        border-radius: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header: Fixed Top Full-Width Navbar -->
+  <header>
+    <div class="header-inner">
+      <!-- Logo & Brand -->
+      <a href="#" class="brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">0rhxPlayer</div>
+          <span class="brand-tag">DESKTOP & VSCODE</span>
+        </div>
+      </a>
+
+      <!-- Navigation & Controls -->
+      <div class="nav-links">
+        <a href="#downloads" class="nav-link hide-mobile" id="navDownloads">Downloads</a>
+        <a href="#screenshots" class="nav-link hide-mobile" id="navScreenshots">Screenshots</a>
+        <a href="#features" class="nav-link hide-mobile" id="navFeatures">Features</a>
+
+        <!-- Controls: Lang Selector, Theme Toggle & GitHub -->
+        <div class="controls-group">
+          <select id="langSelect" class="select-btn" autocomplete="off" aria-label="Select Language">
+            <option value="zh">🇨🇳 中文</option>
+            <option value="en" selected>🇺🇸 EN</option>
+            <option value="ja">🇯🇵 日本語</option>
+          </select>
+          <script>
+            (function() {
+              try {
+                var l = window.__INITIAL_LANG__ || 'en';
+                var s = document.getElementById('langSelect');
+                if (s) {
+                  s.value = l;
+                  for (var i = 0; i < s.options.length; i++) {
+                    var match = (s.options[i].value === l);
+                    s.options[i].selected = match;
+                    if (match) s.selectedIndex = i;
+                  }
+                }
+              } catch(e) {}
+            })();
+          </script>
+
+          <button id="themeToggle" class="theme-btn" title="切换深浅主题" aria-label="Toggle Theme">
+            <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </button>
+
+          <a href="https://github.com/RinCynar/0rhxPlayer-Desktop" target="_blank" class="github-btn" title="GitHub Repository" aria-label="GitHub Repository">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main>
+    <section class="hero">
+      <div class="hero-glow"></div>
+      <div class="container hero-content">
+        <div class="status-banner">
+          <span class="status-dot"></span>
+          <span id="heroStatusText">Project Status: Under Qt Refactoring • Native Architecture</span>
+        </div>
+
+        <div class="badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
+          </svg>
+          <span id="heroBadge">Material 3 Design • Lightweight Local Music Player</span>
+        </div>
+
+        <h1>
+          <span id="heroHeadline1">Clean & Pleasant</span><br />
+          <span class="highlight-text" id="heroHeadline2">Local Music Experience</span>
+        </h1>
+
+        <p id="heroDesc">
+          Pursuing ultimate native responsiveness, minimal overhead, and pure audiophile playback, 0rhxPlayer Desktop is currently undergoing a comprehensive Qt (C++ / Qt 6) refactoring. Existing builds remain available, and the new Qt version is actively in the works!
+        </p>
+
+        <div class="hero-actions">
+          <a href="#downloads" class="btn btn-primary" id="heroPrimaryBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span id="heroPrimaryBtnText">Get Desktop Client (Win / Linux)</span>
+          </a>
+          <a href="https://marketplace.visualstudio.com/items?itemName=RinCynar.0rhxplayer" target="_blank" class="btn btn-outline" id="heroSecondaryBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            <span id="heroSecondaryBtnText">VSCode Extension</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Downloads Matrix - Equal Height & 2x2 Grid -->
+    <section id="downloads" class="container" style="padding-top: 24px;">
+      <div class="section-title">
+        <h2 id="dlSectionTitle">Downloads & Releases</h2>
+        <p id="dlSectionSub">Choose the installer or standalone portable package for your platform</p>
+      </div>
+
+      <!-- Mirror Selector Switch -->
+      <div class="mirror-selector-wrapper">
+        <div class="mirror-selector">
+          <div class="mirror-label">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            <span id="mirrorSelectorTitle">Download Source:</span>
+          </div>
+          <div class="mirror-options">
+            <button type="button" class="mirror-btn active" id="mirrorProxyBtn" onclick="setMirror('proxy')">
+              <span class="mirror-dot"></span>
+              <span id="mirrorProxyLabel">⚡ Proxy Mirror (git.rincynar.top)</span>
+            </button>
+            <button type="button" class="mirror-btn" id="mirrorOfficialBtn" onclick="setMirror('official')">
+              <span id="mirrorOfficialLabel">GitHub Official</span>
+            </button>
+          </div>
+        </div>
+        <div class="mirror-hint" id="mirrorHint">
+          ⚡ Accelerated via git.rincynar.top reverse proxy for faster worldwide routing
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <!-- 1. Desktop Card -->
+        <div class="card">
+          <div class="card-top">
+            <div class="card-header">
+              <div class="card-brand">
+                <div class="card-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+                    <line x1="8" x2="16" y1="21" y2="21"></line>
+                    <line x1="12" x2="12" y1="17" y2="21"></line>
+                  </svg>
+                </div>
+                <div>
+                  <h3 id="desktopCardTitle">0rhxPlayer Desktop</h3>
+                  <p id="desktopCardSub">Windows & Linux Native Client (Qt Refactoring in Progress)</p>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px; align-items: center; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end;">
+                <span id="desktopStatusBadge" class="tag-badge-status">
+                  <span class="status-dot" style="width: 5px; height: 5px;"></span>
+                  <span id="desktopStatusText">Qt Refactoring in Progress</span>
+                </span>
+                <span id="desktopTag" class="tag-badge">v1.0.4</span>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <ul id="desktopFeatureList">
+                <li>⚡ [Status] Desktop client is under full Qt native refactoring</li>
+                <li>Supports FLAC / WAV / APE / MP3 / AAC / OGG / Opus and more</li>
+                <li>10-Band Equalizer with tuned acoustic presets</li>
+                <li>Bilingual synchronized lyrics with smooth center tracking</li>
+                <li>Available as native installer (.exe) & portable archive (.zip / .tar.gz)</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Download Buttons 2x2 Grid -->
+          <div class="card-bottom">
+            <div class="download-mirror-indicator" id="downloadMirrorIndicator">
+              <span class="status-dot" style="width: 5px; height: 5px; background: var(--primary); box-shadow: 0 0 6px var(--primary);"></span>
+              <span id="mirrorActiveText">Download Channel: git.rincynar.top (Accelerated Proxy)</span>
+            </div>
+            <div class="download-grid-2x2">
+              <a id="winExeBtn" href="https://git.rincynar.top/RinCynar/0rhxPlayer-Desktop/releases/latest" target="_blank" class="btn btn-primary btn-m3">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span id="btnWinExe">Windows Installer (.exe)</span>
+              </a>
+              <a id="winZipBtn" href="https://git.rincynar.top/RinCynar/0rhxPlayer-Desktop/releases/latest" target="_blank" class="btn btn-tonal btn-m3">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                </svg>
+                <span id="btnWinZip">Windows Portable (.zip)</span>
+              </a>
+              <a id="linuxAppImageBtn" href="https://git.rincynar.top/RinCynar/0rhxPlayer-Desktop/releases/latest" target="_blank" class="btn btn-tonal btn-m3">
+                <span id="btnLinuxAppImage">Linux .AppImage</span>
+              </a>
+              <a id="linuxTarBtn" href="https://git.rincynar.top/RinCynar/0rhxPlayer-Desktop/releases/latest" target="_blank" class="btn btn-tonal btn-m3">
+                <span id="btnLinuxTar">Linux .tar.gz</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. VSCode Extension Card -->
+        <div class="card">
+          <div class="card-top">
+            <div class="card-header">
+              <div class="card-brand">
+                <div class="card-icon" style="background: rgba(2, 132, 199, 0.15); color: var(--accent-blue);">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                  </svg>
+                </div>
+                <div>
+                  <h3 id="vscodeCardTitle">0rhxPlayer for VSCode</h3>
+                  <p id="vscodeCardSub">Lightweight In-Editor Extension</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <ul id="vscodeFeatureList">
+                <li>Status bar playback controller for focused coding</li>
+                <li>Sidebar library browser and playlist queue</li>
+                <li>Ultra-low memory footprint and instant startup</li>
+                <li>Full shortcut controls and synchronized lyric view</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Extension Buttons 2x2 Grid Equivalent -->
+          <div class="card-bottom">
+            <div class="download-mirror-indicator" id="downloadMirrorIndicatorVscode">
+              <span class="status-dot" style="width: 5px; height: 5px; background: var(--accent-blue); box-shadow: 0 0 6px var(--accent-blue);"></span>
+              <span id="mirrorActiveTextVscode">Download Channel: git.rincynar.top (Accelerated Proxy)</span>
+            </div>
+            <div class="download-grid-2x2">
+              <a href="https://marketplace.visualstudio.com/items?itemName=RinCynar.0rhxplayer" target="_blank" class="btn btn-primary btn-m3" style="background: var(--accent-blue); color: #fff; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span id="btnVscodeMarketplace">Install from Marketplace</span>
+              </a>
+              <a id="vscodeVsixBtn" href="https://git.rincynar.top/RinCynar/0rhxPlayer/releases/latest" target="_blank" class="btn btn-tonal btn-m3">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                <span id="btnVscodeVsix">Download VSIX Package</span>
+              </a>
+              <a href="https://github.com/RinCynar/0rhxPlayer" target="_blank" class="btn btn-tonal btn-m3" style="grid-column: span 2;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                </svg>
+                <span id="btnVscodeRepo">View Extension Repository on GitHub</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screenshots Showcase - Breathing M3 & Global Centering -->
+    <section id="screenshots" class="container screenshots-section">
+      <div class="section-title">
+        <h2 id="ssSectionTitle">Application Screenshots</h2>
+        <p id="ssSectionSub">Clean, responsive UI crafted with Material Design 3</p>
+      </div>
+
+      <div class="screenshots-grid">
+        <!-- Screenshot 1 -->
+        <div class="screenshot-card">
+          <div class="screenshot-frame">
+            <img id="ss1Img" src="info-pic/Dark-HomePage.png" alt="Home & Library" loading="lazy" decoding="async" />
+          </div>
+          <div class="screenshot-caption">
+            <h4 id="ss1Title">Home & Library View</h4>
+            <p id="ss1Sub">Personalized greetings, smart recommendations & adaptive sidebar</p>
+          </div>
+        </div>
+
+        <!-- Screenshot 2 -->
+        <div class="screenshot-card">
+          <div class="screenshot-frame">
+            <img id="ss2Img" src="info-pic/Dark-NowPlaying.png" alt="NowPlaying & Bilingual Lyrics" loading="lazy" decoding="async" />
+          </div>
+          <div class="screenshot-caption">
+            <h4 id="ss2Title">NowPlaying & Bilingual Lyrics</h4>
+            <p id="ss2Sub">Audio stream metadata card and smooth scrolling lyrics</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="container">
+      <div class="section-title">
+        <h2 id="featSectionTitle">Key Features</h2>
+        <p id="featSectionSub">Practical features focused on local music listening</p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" x2="20" y1="21" y2="21"></line>
+              <line x1="4" x2="20" y1="3" y2="3"></line>
+              <line x1="4" x2="20" y1="12" y2="12"></line>
+            </svg>
+          </div>
+          <h3 id="feat1Title">Local Audio Decoding & EQ</h3>
+          <p id="feat1Sub">
+            Powered by cpal + symphonia Rust backend, supporting major audio formats and a 10-band parametric equalizer.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="21" x2="3" y1="6" y2="6"></line>
+              <line x1="15" x2="3" y1="12" y2="12"></line>
+              <line x1="17" x2="3" y1="18" y2="18"></line>
+            </svg>
+          </div>
+          <h3 id="feat2Title">Bilingual Synchronized Lyrics</h3>
+          <p id="feat2Sub">
+            Supports embedded and external LRC lyrics with bilingual translations, font size scaling, and smooth alignment.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <h3 id="feat3Title">Material 3 Motion & Speed</h3>
+          <p id="feat3Sub">
+            Adheres to M3 emphasized easing curves with virtualized rendering (@tanstack/react-virtual) for 60fps responsiveness.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p style="margin-bottom: 6px;">
+        0rhxPlayer Desktop is open source under the <a href="https://github.com/RinCynar/0rhxPlayer-Desktop/blob/main/LICENSE" target="_blank">GPL-3.0 License</a>.
+      </p>
+      <p>
+        Copyright © 2026 <a href="https://github.com/RinCynar" target="_blank">RinCynar</a>. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Script (I18N + Theme + Data Fetching) -->
+  <script>
+    // ========================
+    // 1. I18N Dictionaries
+    // ========================
+    const I18N = {
+      zh: {
+        pageTitle: "0rhxPlayer - 轻量本地音乐播放器 (Desktop & VSCode)",
+        navDownloads: "下载中心",
+        navScreenshots: "界面预览",
+        navFeatures: "特性",
+        heroStatusText: "项目状态：Qt 重构中 • 全新原生架构演进",
+        heroBadge: "Material 3 规范 • 轻量本地音乐播放器",
+        heroHeadline1: "简洁清爽的",
+        heroHeadline2: "本地音乐播放体验",
+        heroDesc: "为追求更极致的原生性能与发烧级音频回放体验，0rhxPlayer 桌面端目前正在全面进行 Qt (C++ / Qt 6) 原生架构重构。现有桌面版本仍可正常下载体验，全新 Qt 重构版正在火热开发中，敬请期待！",
+        heroPrimaryBtnText: "获取客户端 (Windows / Linux)",
+        heroSecondaryBtnText: "VSCode 插件版",
+        dlSectionTitle: "客户端与插件获取",
+        dlSectionSub: "选择适合您系统的安装程序或免安装便携版本",
+        mirrorSelectorTitle: "下载通道：",
+        mirrorProxyLabel: "⚡ 反代加速 (git.rincynar.top)",
+        mirrorOfficialLabel: "GitHub 官方源",
+        mirrorHintProxy: "⚡ 已启用 git.rincynar.top 反代加速，国内网络下载更稳定快速（已覆盖桌面安装包与 VSCode VSIX 离线包）",
+        mirrorHintOfficial: "🌐 当前为 GitHub 官方直接下载，若遇连接缓慢可切换为反代加速源",
+        mirrorActiveTextProxy: "当前下载通道：git.rincynar.top (反代加速)",
+        mirrorActiveTextOfficial: "当前下载通道：GitHub 官方源 (直接下载)",
+        desktopCardTitle: "0rhxPlayer 桌面端",
+        desktopCardSub: "Windows & Linux 本地客户端（Qt 重构中）",
+        desktopStatusText: "Qt 重构中",
+        desktopFeatures: [
+          "⚡ [开发状态] 桌面端正在全力进行 Qt 原生架构重构",
+          "支持 FLAC / WAV / APE / MP3 / AAC / OGG / Opus 等常见格式",
+          "10 段均衡器调节与声学预设",
+          "中/日双语动态歌词同步显示与平滑居中滚动",
+          "提供官方安装包与免安装便携绿色归档"
+        ],
+        btnWinExe: "Windows 安装包 (.exe)",
+        btnWinZip: "Windows 便携版 (.zip)",
+        btnLinuxAppImage: "Linux .AppImage",
+        btnLinuxTar: "Linux .tar.gz",
+        vscodeCardTitle: "0rhxPlayer for VSCode",
+        vscodeCardSub: "VSCode 沉浸式轻量插件",
+        vscodeFeatures: [
+          "状态栏极简常驻控制器，敲代码不分心",
+          "侧边栏挂载本地曲库与播放队列",
+          "低内存占用，开箱即用体验",
+          "支持快捷键全局控制与歌词展示"
+        ],
+        btnVscodeMarketplace: "VSCode 市场安装",
+        btnVscodeVsix: "下载 VSIX 离线包",
+        btnVscodeRepo: "查看 VSCode 插件源码仓库",
+        ssSectionTitle: "应用实机预览",
+        ssSectionSub: "遵循 Material Design 3 规范的清爽界面设计",
+        ss1Title: "主页与曲库视图",
+        ss1Sub: "个性化问候、随机推荐单曲与专辑、自适应分类侧栏",
+        ss2Title: "播放详情与双语歌词",
+        ss2Sub: "音频流参数卡片、逐行双语歌词平滑同步滚动",
+        featSectionTitle: "主要功能特性",
+        featSectionSub: "专注于本地音频收听的实用功能",
+        feat1Title: "本地音频解码与 EQ",
+        feat1Sub: "基于 cpal + symphonia 后端，支持主流音频格式本地播放，提供 10 段参数化均衡器与常见声学预设。",
+        feat2Title: "双语歌词同步呈现",
+        feat2Sub: "支持内嵌与外部 LRC 歌词，提供中/日双语翻译歌词同步显示，支持居中平滑高亮与字号调整。",
+        feat3Title: "Material 3 动效与性能",
+        feat3Sub: "遵循 M3 强调缓动曲线，结合虚拟化列表（@tanstack/react-virtual）与异步懒加载，确保大曲库滑动流畅。"
+      },
+      en: {
+        pageTitle: "0rhxPlayer - Lightweight Local Music Player (Desktop & VSCode)",
+        navDownloads: "Downloads",
+        navScreenshots: "Screenshots",
+        navFeatures: "Features",
+        heroStatusText: "Project Status: Under Qt Refactoring • Native Architecture",
+        heroBadge: "Material 3 Design • Lightweight Local Music Player",
+        heroHeadline1: "Clean & Pleasant",
+        heroHeadline2: "Local Music Experience",
+        heroDesc: "Pursuing ultimate native responsiveness, minimal overhead, and pure audiophile playback, 0rhxPlayer Desktop is currently undergoing a comprehensive Qt (C++ / Qt 6) refactoring. Existing builds remain available, and the new Qt version is actively in the works!",
+        heroPrimaryBtnText: "Get Desktop Client (Win / Linux)",
+        heroSecondaryBtnText: "VSCode Extension",
+        dlSectionTitle: "Downloads & Releases",
+        dlSectionSub: "Choose the installer or standalone portable package for your platform",
+        mirrorSelectorTitle: "Download Source:",
+        mirrorProxyLabel: "⚡ Proxy Mirror (git.rincynar.top)",
+        mirrorOfficialLabel: "GitHub Official",
+        mirrorHintProxy: "⚡ Accelerated via git.rincynar.top reverse proxy for faster worldwide routing (covers desktop builds & VSCode VSIX)",
+        mirrorHintOfficial: "🌐 Using direct GitHub releases links. Switch to proxy mirror if downloads are slow",
+        mirrorActiveTextProxy: "Download Channel: git.rincynar.top (Accelerated Proxy)",
+        mirrorActiveTextOfficial: "Download Channel: GitHub Official Releases",
+        desktopCardTitle: "0rhxPlayer Desktop",
+        desktopCardSub: "Windows & Linux Native Client (Qt Refactoring in Progress)",
+        desktopStatusText: "Qt Refactoring in Progress",
+        desktopFeatures: [
+          "⚡ [Status] Desktop client is under full Qt native refactoring",
+          "Supports FLAC / WAV / APE / MP3 / AAC / OGG / Opus and more",
+          "10-Band Equalizer with tuned acoustic presets",
+          "Bilingual synchronized lyrics with smooth center tracking",
+          "Available as native installer (.exe) & portable archive (.zip / .tar.gz)"
+        ],
+        btnWinExe: "Windows Installer (.exe)",
+        btnWinZip: "Windows Portable (.zip)",
+        btnLinuxAppImage: "Linux .AppImage",
+        btnLinuxTar: "Linux .tar.gz",
+        vscodeCardTitle: "0rhxPlayer for VSCode",
+        vscodeCardSub: "Lightweight In-Editor Extension",
+        vscodeFeatures: [
+          "Status bar playback controller for focused coding",
+          "Sidebar library browser and playlist queue",
+          "Ultra-low memory footprint and instant startup",
+          "Full shortcut controls and synchronized lyric view"
+        ],
+        btnVscodeMarketplace: "Install from Marketplace",
+        btnVscodeVsix: "Download VSIX Package",
+        btnVscodeRepo: "View Extension Repository on GitHub",
+        ssSectionTitle: "Application Screenshots",
+        ssSectionSub: "Clean, responsive UI crafted with Material Design 3",
+        ss1Title: "Home & Library View",
+        ss1Sub: "Personalized greetings, smart recommendations & adaptive sidebar",
+        ss2Title: "NowPlaying & Bilingual Lyrics",
+        ss2Sub: "Audio stream metadata card and smooth scrolling lyrics",
+        featSectionTitle: "Key Features",
+        featSectionSub: "Practical features focused on local music listening",
+        feat1Title: "Local Audio Decoding & EQ",
+        feat1Sub: "Powered by cpal + symphonia Rust backend, supporting major audio formats and a 10-band parametric equalizer.",
+        feat2Title: "Bilingual Synchronized Lyrics",
+        feat2Sub: "Supports embedded and external LRC lyrics with bilingual translations, font size scaling, and smooth alignment.",
+        feat3Title: "Material 3 Motion & Speed",
+        feat3Sub: "Adheres to M3 emphasized easing curves with virtualized rendering (@tanstack/react-virtual) for 60fps responsiveness."
+      },
+      ja: {
+        pageTitle: "0rhxPlayer - 軽量ローカル音楽プレーヤー (Desktop & VSCode)",
+        navDownloads: "ダウンロード",
+        navScreenshots: "スクリーンショット",
+        navFeatures: "機能紹介",
+        heroStatusText: "プロジェクト状況：Qt リファクタリング中 • 新生ネイティブ版へ",
+        heroBadge: "Material 3 設計 • 軽量ローカル音楽プレーヤー",
+        heroHeadline1: "シンプルで心地よい",
+        heroHeadline2: "ローカル音楽再生体験",
+        heroDesc: "さらなる極限のネイティブパフォーマンスと真のオーディオ体験を追求し、0rhxPlayer デスクトップ版は現在 Qt (C++ / Qt 6) への全面リファクタリングを実施中です。現行版は継続してダウンロード可能で、新世代の登場にご期待ください！",
+        heroPrimaryBtnText: "デスクトップ版を入手 (Win / Linux)",
+        heroSecondaryBtnText: "VSCode 拡張機能",
+        dlSectionTitle: "ダウンロード＆リリース",
+        dlSectionSub: "お使いのシステムに適したインストーラーまたはポータブル版を選択してください",
+        mirrorSelectorTitle: "ダウンロード元：",
+        mirrorProxyLabel: "⚡ 高速プロキシ (git.rincynar.top)",
+        mirrorOfficialLabel: "GitHub 公式",
+        mirrorHintProxy: "⚡ git.rincynar.top リバースプロキシによる高速ダウンロードが有効です（デスクトップ版および VSCode VSIX に対応）",
+        mirrorHintOfficial: "🌐 GitHub 公式リリースから直接ダウンロードします。速度が遅い場合はプロキシに切り替え可能です",
+        mirrorActiveTextProxy: "現在のダウンロード元：git.rincynar.top (高速プロキシ)",
+        mirrorActiveTextOfficial: "現在のダウンロード元：GitHub 公式",
+        desktopCardTitle: "0rhxPlayer デスクトップ版",
+        desktopCardSub: "Windows & Linux ネイティブクライアント（Qt リファクタリング中）",
+        desktopStatusText: "Qt リファクタリング中",
+        desktopFeatures: [
+          "⚡ [ステータス] デスクトップ版は現在 Qt ネイティブ全面リファクタリング中",
+          "FLAC / WAV / APE / MP3 / AAC / OGG / Opus 等の再生に対応",
+          "10バンドイコライザー調整＆各種音響プリセット",
+          "日中バイリンガル同期歌詞のスムーズスクロール表示",
+          "公式インストーラー (.exe) およびポータブル版 (.zip / .tar.gz) を提供"
+        ],
+        btnWinExe: "Windows インストーラー (.exe)",
+        btnWinZip: "Windows ポータブル版 (.zip)",
+        btnLinuxAppImage: "Linux .AppImage",
+        btnLinuxTar: "Linux .tar.gz",
+        vscodeCardTitle: "0rhxPlayer for VSCode",
+        vscodeCardSub: "エディタ統合型軽量拡張機能",
+        vscodeFeatures: [
+          "ステータスバー常駐コントローラーでコーディングに集中",
+          "サイドバーでのローカルライブラリ・キュー管理",
+          "超軽量メモリ消費で高速起動",
+          "ショートカットキー操作および歌詞表示に対応"
+        ],
+        btnVscodeMarketplace: "マーケットプレイスからインストール",
+        btnVscodeVsix: "VSIX パッケージをダウンロード",
+        btnVscodeRepo: "拡張機能の GitHub リポジトリを見る",
+        ssSectionTitle: "スクリーンショット",
+        ssSectionSub: "Material Design 3 に準拠した洗練されたUI",
+        ss1Title: "ホーム＆ライブラリ画面",
+        ss1Sub: "時間帯に合わせた挨拶、おすすめ曲＆アルバム、適応型サイドバー",
+        ss2Title: "再生画面＆バイリンガル歌詞",
+        ss2Sub: "オーディオストリーム情報カード、滑らかな同期歌詞スクロール",
+        featSectionTitle: "主な機能",
+        featSectionSub: "ローカル音楽鑑賞に特化した実用機能",
+        feat1Title: "ローカルデコード＆EQ",
+        feat1Sub: "cpal + symphonia による高効率なRustバックエンド。主要フォーマットと10バンドEQに対応。",
+        feat2Title: "バイリンガル同期歌詞",
+        feat2Sub: "内蔵および外部LRC歌詞の解析に対応。日中対訳歌詞の同期表示、中央配置ハイライト、フォントサイズ変更が可能。",
+        feat3Title: "Material 3 モーション＆高速描画",
+        feat3Sub: "M3標準イージング曲線を採用し、仮想リスト（@tanstack/react-virtual）と遅延読み込みで60fpsの滑らかさを実現。"
+      }
+    };
+
+    // ========================
+    // 2. Global State & Mirror Manager
+    // ========================
+    let currentMirror = localStorage.getItem('0rhx_download_mirror') || 'proxy';
+    let releaseData = null;
+
+    function applyDownloadUrls() {
+      const isProxy = currentMirror === 'proxy';
+      const toUrl = (url) => {
+        if (!url) return url;
+        if (isProxy) {
+          return url.replace('https://github.com/', 'https://git.rincynar.top/');
+        } else {
+          return url.replace('https://git.rincynar.top/', 'https://github.com/');
+        }
+      };
+
+      const defaultBase = isProxy
+        ? 'https://git.rincynar.top/RinCynar/0rhxPlayer-Desktop/releases/latest'
+        : 'https://github.com/RinCynar/0rhxPlayer-Desktop/releases/latest';
+
+      const dl = releaseData && releaseData.downloads ? releaseData.downloads : {};
+
+      const winExeBtn = document.getElementById('winExeBtn');
+      if (winExeBtn) winExeBtn.href = toUrl(dl.windows_x64_exe) || defaultBase;
+
+      const winZipBtn = document.getElementById('winZipBtn');
+      if (winZipBtn) winZipBtn.href = toUrl(dl.windows_x64_zip) || defaultBase;
+
+      const linuxAppImageBtn = document.getElementById('linuxAppImageBtn');
+      if (linuxAppImageBtn) linuxAppImageBtn.href = toUrl(dl.linux_x64_appimage) || defaultBase;
+
+      const linuxTarBtn = document.getElementById('linuxTarBtn');
+      if (linuxTarBtn) linuxTarBtn.href = toUrl(dl.linux_x64_tar) || defaultBase;
+
+      const defaultVscodeVsix = isProxy
+        ? 'https://git.rincynar.top/RinCynar/0rhxPlayer/releases/latest'
+        : 'https://github.com/RinCynar/0rhxPlayer/releases/latest';
+
+      const vscodeVsixBtn = document.getElementById('vscodeVsixBtn');
+      if (vscodeVsixBtn) {
+        const rawVsix = (releaseData && releaseData.vscode && releaseData.vscode.vsix)
+          ? releaseData.vscode.vsix
+          : 'https://github.com/RinCynar/0rhxPlayer/releases/latest';
+        vscodeVsixBtn.href = toUrl(rawVsix) || defaultVscodeVsix;
+      }
+
+      // Update mirror UI buttons, labels & hints across languages
+      const proxyBtn = document.getElementById('mirrorProxyBtn');
+      const officialBtn = document.getElementById('mirrorOfficialBtn');
+      const hintEl = document.getElementById('mirrorHint');
+      const activeTextEl = document.getElementById('mirrorActiveText');
+      const activeTextVscodeEl = document.getElementById('mirrorActiveTextVscode');
+      const selectorTitleEl = document.getElementById('mirrorSelectorTitle');
+      const proxyLabelEl = document.getElementById('mirrorProxyLabel');
+      const officialLabelEl = document.getElementById('mirrorOfficialLabel');
+      const d = I18N[currentLang] || I18N.en;
+
+      if (proxyBtn) proxyBtn.classList.toggle('active', isProxy);
+      if (officialBtn) officialBtn.classList.toggle('active', !isProxy);
+      if (selectorTitleEl && d.mirrorSelectorTitle) selectorTitleEl.textContent = d.mirrorSelectorTitle;
+      if (proxyLabelEl && d.mirrorProxyLabel) proxyLabelEl.textContent = d.mirrorProxyLabel;
+      if (officialLabelEl && d.mirrorOfficialLabel) officialLabelEl.textContent = d.mirrorOfficialLabel;
+      if (hintEl) {
+        hintEl.textContent = isProxy ? d.mirrorHintProxy : d.mirrorHintOfficial;
+      }
+      if (activeTextEl) {
+        activeTextEl.textContent = isProxy ? d.mirrorActiveTextProxy : d.mirrorActiveTextOfficial;
+      }
+      if (activeTextVscodeEl) {
+        activeTextVscodeEl.textContent = isProxy ? d.mirrorActiveTextProxy : d.mirrorActiveTextOfficial;
+      }
+    }
+
+    function setMirror(mode) {
+      currentMirror = mode;
+      localStorage.setItem('0rhx_download_mirror', mode);
+      applyDownloadUrls();
+    }
+    // Bind to window to guarantee inline onclick="setMirror('...')" always functions
+    window.setMirror = setMirror;
+
+    // Additional direct click listeners
+    const mirrorProxyBtn = document.getElementById('mirrorProxyBtn');
+    if (mirrorProxyBtn) {
+      mirrorProxyBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        setMirror('proxy');
+      });
+    }
+    const mirrorOfficialBtn = document.getElementById('mirrorOfficialBtn');
+    if (mirrorOfficialBtn) {
+      mirrorOfficialBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        setMirror('official');
+      });
+    }
+
+    // ========================
+    // 3. Language Detection & State
+    // ========================
+    function detectLanguage() {
+      if (window.__INITIAL_LANG__) {
+        return window.__INITIAL_LANG__;
+      }
+      const saved = localStorage.getItem('0rhx_lang');
+      if (saved && ['zh', 'en', 'ja'].includes(saved)) {
+        return saved;
+      }
+      const navLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+      if (navLang.startsWith('zh')) return 'zh';
+      if (navLang.startsWith('ja')) return 'ja';
+      return 'en';
+    }
+
+    let currentLang = detectLanguage();
+
+    function syncLangSelect(lang) {
+      const sel = document.getElementById('langSelect');
+      if (!sel) return;
+      sel.value = lang;
+      for (let i = 0; i < sel.options.length; i++) {
+        const isMatch = sel.options[i].value === lang;
+        sel.options[i].selected = isMatch;
+        if (isMatch) {
+          sel.selectedIndex = i;
+        }
+      }
+    }
+
+    function renderLanguage(lang, isUserAction = false) {
+      currentLang = lang;
+      if (isUserAction) {
+        localStorage.setItem('0rhx_lang', lang);
+      }
+      const d = I18N[lang] || I18N.en;
+
+      if (document.getElementById('pageTitle')) document.getElementById('pageTitle').textContent = d.pageTitle;
+      if (document.getElementById('navDownloads')) document.getElementById('navDownloads').textContent = d.navDownloads;
+      if (document.getElementById('navScreenshots')) document.getElementById('navScreenshots').textContent = d.navScreenshots;
+      if (document.getElementById('navFeatures')) document.getElementById('navFeatures').textContent = d.navFeatures;
+      if (document.getElementById('heroStatusText')) document.getElementById('heroStatusText').textContent = d.heroStatusText;
+      if (document.getElementById('heroBadge')) document.getElementById('heroBadge').textContent = d.heroBadge;
+      if (document.getElementById('heroHeadline1')) document.getElementById('heroHeadline1').textContent = d.heroHeadline1;
+      if (document.getElementById('heroHeadline2')) document.getElementById('heroHeadline2').textContent = d.heroHeadline2;
+      if (document.getElementById('heroDesc')) document.getElementById('heroDesc').textContent = d.heroDesc;
+      if (document.getElementById('heroPrimaryBtnText')) document.getElementById('heroPrimaryBtnText').textContent = d.heroPrimaryBtnText;
+      if (document.getElementById('heroSecondaryBtnText')) document.getElementById('heroSecondaryBtnText').textContent = d.heroSecondaryBtnText;
+      if (document.getElementById('dlSectionTitle')) document.getElementById('dlSectionTitle').textContent = d.dlSectionTitle;
+      if (document.getElementById('dlSectionSub')) document.getElementById('dlSectionSub').textContent = d.dlSectionSub;
+      if (document.getElementById('desktopCardTitle')) document.getElementById('desktopCardTitle').textContent = d.desktopCardTitle;
+      if (document.getElementById('desktopCardSub')) document.getElementById('desktopCardSub').textContent = d.desktopCardSub;
+      if (document.getElementById('desktopStatusText')) document.getElementById('desktopStatusText').textContent = d.desktopStatusText;
+      
+      const dfEl = document.getElementById('desktopFeatureList');
+      if (dfEl) dfEl.innerHTML = d.desktopFeatures.map(f => `<li>${f}</li>`).join('');
+
+      if (document.getElementById('btnWinExe')) document.getElementById('btnWinExe').textContent = d.btnWinExe;
+      if (document.getElementById('btnWinZip')) document.getElementById('btnWinZip').textContent = d.btnWinZip;
+      if (document.getElementById('btnLinuxAppImage')) document.getElementById('btnLinuxAppImage').textContent = d.btnLinuxAppImage;
+      if (document.getElementById('btnLinuxTar')) document.getElementById('btnLinuxTar').textContent = d.btnLinuxTar;
+
+      if (document.getElementById('vscodeCardTitle')) document.getElementById('vscodeCardTitle').textContent = d.vscodeCardTitle;
+      if (document.getElementById('vscodeCardSub')) document.getElementById('vscodeCardSub').textContent = d.vscodeCardSub;
+
+      const vfEl = document.getElementById('vscodeFeatureList');
+      if (vfEl) vfEl.innerHTML = d.vscodeFeatures.map(f => `<li>${f}</li>`).join('');
+
+      if (document.getElementById('btnVscodeMarketplace')) document.getElementById('btnVscodeMarketplace').textContent = d.btnVscodeMarketplace;
+      if (document.getElementById('btnVscodeVsix')) document.getElementById('btnVscodeVsix').textContent = d.btnVscodeVsix;
+      if (document.getElementById('btnVscodeRepo')) document.getElementById('btnVscodeRepo').textContent = d.btnVscodeRepo;
+
+      if (document.getElementById('ssSectionTitle')) document.getElementById('ssSectionTitle').textContent = d.ssSectionTitle;
+      if (document.getElementById('ssSectionSub')) document.getElementById('ssSectionSub').textContent = d.ssSectionSub;
+      if (document.getElementById('ss1Title')) document.getElementById('ss1Title').textContent = d.ss1Title;
+      if (document.getElementById('ss1Sub')) document.getElementById('ss1Sub').textContent = d.ss1Sub;
+      if (document.getElementById('ss2Title')) document.getElementById('ss2Title').textContent = d.ss2Title;
+      if (document.getElementById('ss2Sub')) document.getElementById('ss2Sub').textContent = d.ss2Sub;
+
+      if (document.getElementById('featSectionTitle')) document.getElementById('featSectionTitle').textContent = d.featSectionTitle;
+      if (document.getElementById('featSectionSub')) document.getElementById('featSectionSub').textContent = d.featSectionSub;
+      if (document.getElementById('feat1Title')) document.getElementById('feat1Title').textContent = d.feat1Title;
+      if (document.getElementById('feat1Sub')) document.getElementById('feat1Sub').textContent = d.feat1Sub;
+      if (document.getElementById('feat2Title')) document.getElementById('feat2Title').textContent = d.feat2Title;
+      if (document.getElementById('feat2Sub')) document.getElementById('feat2Sub').textContent = d.feat2Sub;
+      if (document.getElementById('feat3Title')) document.getElementById('feat3Title').textContent = d.feat3Title;
+      if (document.getElementById('feat3Sub')) document.getElementById('feat3Sub').textContent = d.feat3Sub;
+
+      if (document.getElementById('mirrorSelectorTitle')) {
+        document.getElementById('mirrorSelectorTitle').textContent = d.mirrorSelectorTitle;
+      }
+      if (document.getElementById('mirrorProxyLabel')) {
+        document.getElementById('mirrorProxyLabel').textContent = d.mirrorProxyLabel;
+      }
+      if (document.getElementById('mirrorOfficialLabel')) {
+        document.getElementById('mirrorOfficialLabel').textContent = d.mirrorOfficialLabel;
+      }
+
+      applyDownloadUrls();
+      syncLangSelect(lang);
+      document.documentElement.lang = lang === 'zh' ? 'zh-CN' : (lang === 'ja' ? 'ja' : 'en');
+
+      // Reveal body immediately once i18n rendering is done
+      document.documentElement.classList.remove('i18n-pending');
+    }
+
+    const langSelectEl = document.getElementById('langSelect');
+    if (langSelectEl) {
+      langSelectEl.addEventListener('change', (e) => {
+        renderLanguage(e.target.value, true);
+      });
+    }
+
+    // Initial render of language
+    renderLanguage(currentLang, false);
+
+    // Safeguards against aggressive browser form control restoration on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      syncLangSelect(currentLang);
+      applyDownloadUrls();
+    });
+    window.addEventListener('pageshow', () => {
+      syncLangSelect(currentLang);
+      applyDownloadUrls();
+    });
+    setTimeout(() => {
+      syncLangSelect(currentLang);
+      applyDownloadUrls();
+    }, 0);
+    setTimeout(() => {
+      syncLangSelect(currentLang);
+      applyDownloadUrls();
+    }, 50);
+
+    // ========================
+    // 4. Theme Toggle
+    // ========================
+    const html = document.documentElement;
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+
+    function updateThemeUI() {
+      const isDark = html.classList.contains('dark');
+      if (isDark) {
+        themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+      } else {
+        themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      }
+
+      const ss1 = document.getElementById('ss1Img');
+      const ss2 = document.getElementById('ss2Img');
+      if (ss1) ss1.src = isDark ? 'info-pic/Dark-HomePage.png' : 'info-pic/Light-HomePage.png';
+      if (ss2) ss2.src = isDark ? 'info-pic/Dark-NowPlaying.png' : 'info-pic/Light-NowPlaying.png';
+    }
+
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        html.classList.toggle('dark');
+        const isDark = html.classList.contains('dark');
+        localStorage.setItem('0rhx_theme', isDark ? 'dark' : 'light');
+        updateThemeUI();
+      });
+    }
+
+    if (localStorage.getItem('0rhx_theme') === 'light') {
+      html.classList.remove('dark');
+    }
+    updateThemeUI();
+
+    // ========================
+    // 5. Release Links Fetcher
+    // ========================
+    async function loadReleaseData() {
+      try {
+        const res = await fetch('./latest.json');
+        if (res.ok) {
+          releaseData = await res.json();
+          if (releaseData.tag) {
+            const tagEl = document.getElementById('desktopTag');
+            if (tagEl) tagEl.textContent = releaseData.tag;
+          }
+        }
+      } catch (e) {
+        // Fallback URLs already in HTML
+      }
+      applyDownloadUrls();
+    }
+
+    loadReleaseData();
+  </script>
+
+</body>
+</html>
+
