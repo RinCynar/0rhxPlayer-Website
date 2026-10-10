@@ -514,6 +514,106 @@
       width: 100%;
     }
 
+    /* Mirror Selector Switch */
+    .mirror-selector-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 30px;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .mirror-selector {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 10px 6px 16px;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 9999px;
+      box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.05);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .mirror-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .mirror-options {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg-elevated);
+      padding: 3px;
+      border-radius: 9999px;
+    }
+
+    .mirror-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.775rem;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.05, 0.7, 0.1, 1.0);
+      font-family: inherit;
+    }
+
+    .mirror-btn:hover {
+      color: var(--text-main);
+    }
+
+    .mirror-btn.active {
+      background: var(--primary);
+      color: var(--primary-on);
+      box-shadow: 0 2px 8px rgba(0, 106, 107, 0.28);
+    }
+
+    html.dark .mirror-btn.active {
+      background: var(--primary);
+      color: var(--primary-on);
+      box-shadow: 0 2px 10px rgba(57, 197, 187, 0.35);
+    }
+
+    .mirror-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      display: none;
+      animation: status-pulse 2s infinite ease-in-out;
+    }
+
+    .mirror-btn.active .mirror-dot {
+      display: inline-block;
+    }
+
+    .mirror-hint {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--tonal-bg);
+      border: 1px solid var(--tonal-border);
+      padding: 4px 14px;
+      border-radius: 9999px;
+      max-width: 92%;
+    }
+
     /* Downloads Matrix - Equal Height & 2x2 Clean Grid */
     .card-grid {
       display: grid;
@@ -892,6 +992,31 @@
         <p id="dlSectionSub">Get the apps and extension for your platform</p>
       </div>
 
+      <!-- Mirror Selector Switch -->
+      <div class="mirror-selector-wrapper">
+        <div class="mirror-selector">
+          <div class="mirror-label">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            <span id="mirrorSelectorTitle">Download Source</span>
+          </div>
+          <div class="mirror-options">
+            <button type="button" class="mirror-btn active" id="mirrorOfficialBtn" onclick="setMirror('official')">
+              <span class="mirror-dot"></span>
+              <span id="mirrorOfficialLabel">GitHub Official</span>
+            </button>
+            <button type="button" class="mirror-btn" id="mirrorProxyBtn" onclick="setMirror('proxy')">
+              <span class="mirror-dot"></span>
+              <span id="mirrorProxyLabel">git.rincynar.top Mirror</span>
+            </button>
+          </div>
+        </div>
+        <div class="mirror-hint" id="mirrorHint">
+          Using GitHub direct downloads. Switch to mirror if downloads are slow.
+        </div>
+      </div>
+
       <div class="card-grid">
         <!-- 1. Desktop Card -->
         <div class="card">
@@ -996,7 +1121,7 @@
                 </svg>
                 <span id="btnVscodeMarketplace">Install from Marketplace</span>
               </a>
-              <a id="vscodeVsixBtn" href="https://git.rincynar.top/RinCynar/0rhxPlayer-VSC/releases/latest" target="_blank" class="btn btn-tonal btn-m3">
+              <a id="vscodeVsixBtn" href="https://github.com/RinCynar/0rhxPlayer-VSC/releases/latest" target="_blank" class="btn btn-tonal btn-m3">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
                   <polyline points="14 2 14 8 20 8"></polyline>
@@ -1098,6 +1223,11 @@
         heroDesc: "0rhxPlayer 桌面端采用 Qt 6（C++ / Qt Quick）与 WASAPI 独占输出原生构建，提供低资源占用的本地音频播放体验。v1.1.0 正式版现已发布。",
         dlSectionTitle: "客户端与插件获取",
         dlSectionSub: "选择适合您平台的应用与扩展",
+        mirrorSelectorTitle: "下载源",
+        mirrorOfficialLabel: "GitHub 官方源",
+        mirrorProxyLabel: "git.rincynar.top 镜像源",
+        mirrorHintOfficial: "当前使用 GitHub 官方源下载，若连接缓慢可切换为镜像源",
+        mirrorHintProxy: "当前已启用 git.rincynar.top 镜像源加速下载",
         desktopCardTitle: "0rhxPlayer 桌面端",
         desktopCardSub: "Windows & Linux 原生 Qt 6 客户端",
         desktopStatusText: "最新版",
@@ -1143,6 +1273,11 @@
 
         dlSectionTitle: "Downloads & Releases",
         dlSectionSub: "Get the apps and extension for your platform",
+        mirrorSelectorTitle: "Download Source",
+        mirrorOfficialLabel: "GitHub Official",
+        mirrorProxyLabel: "git.rincynar.top Mirror",
+        mirrorHintOfficial: "Using GitHub direct downloads. Switch to mirror if downloads are slow",
+        mirrorHintProxy: "Downloads accelerated via git.rincynar.top mirror",
         desktopCardTitle: "0rhxPlayer Desktop",
         desktopCardSub: "Native Qt 6 Client for Windows & Linux",
         desktopStatusText: "Latest",
@@ -1187,6 +1322,11 @@
         heroDesc: "0rhxPlayer デスクトップ版は Qt 6（C++ / Qt Quick）と WASAPI 排他出力によりネイティブ構築され、軽快なシステム動作とクリアな音質を提供します。v1.1.0 が利用可能です。",
         dlSectionTitle: "ダウンロード＆リリース",
         dlSectionSub: "お使いのプラットフォームに合ったアプリと拡張機能",
+        mirrorSelectorTitle: "ダウンロード元",
+        mirrorOfficialLabel: "GitHub 公式",
+        mirrorProxyLabel: "git.rincynar.top ミラー",
+        mirrorHintOfficial: "GitHub 公式から直接ダウンロードします。低速な場合はミラーに切り替えてください",
+        mirrorHintProxy: "git.rincynar.top ミラーによるダウンロードが有効です",
         desktopCardTitle: "0rhxPlayer デスクトップ版",
         desktopCardSub: "Windows & Linux ネイティブ Qt 6 クライアント",
         desktopStatusText: "最新版",
@@ -1223,7 +1363,74 @@
     };
 
     // ========================
-    // 2. Language Detection & State
+    // 2. Global State & Mirror Manager
+    // ========================
+    let currentMirror = localStorage.getItem('0rhx_download_mirror') || 'official';
+    let releaseData = null;
+
+    function toMirrorUrl(url) {
+      if (!url) return url;
+      if (currentMirror === 'proxy') {
+        return url.replace('https://github.com/', 'https://git.rincynar.top/');
+      } else {
+        return url.replace('https://git.rincynar.top/', 'https://github.com/');
+      }
+    }
+
+    function applyDownloadUrls() {
+      const isProxy = currentMirror === 'proxy';
+
+      const dl = releaseData && releaseData.downloads ? releaseData.downloads : {};
+      const exeBase = dl.windows_setup_exe || dl.windows_x64_exe || 'https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.0/0rhxPlayer-v1.1.0-windows-x64-setup.exe';
+      const zipBase = dl.windows_portable_zip || dl.windows_x64_zip || 'https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.0/0rhxPlayer-v1.1.0-windows-x64-portable.zip';
+      const vsixBase = (releaseData && releaseData.vscode && releaseData.vscode.vsix) || 'https://github.com/RinCynar/0rhxPlayer-VSC/releases/latest';
+
+      const winExeBtn = document.getElementById('winExeBtn');
+      if (winExeBtn) winExeBtn.href = toMirrorUrl(exeBase);
+
+      const winZipBtn = document.getElementById('winZipBtn');
+      if (winZipBtn) winZipBtn.href = toMirrorUrl(zipBase);
+
+      const vscodeVsixBtn = document.getElementById('vscodeVsixBtn');
+      if (vscodeVsixBtn) vscodeVsixBtn.href = toMirrorUrl(vsixBase);
+
+      const officialBtn = document.getElementById('mirrorOfficialBtn');
+      const proxyBtn = document.getElementById('mirrorProxyBtn');
+      const hintEl = document.getElementById('mirrorHint');
+
+      if (officialBtn) officialBtn.classList.toggle('active', !isProxy);
+      if (proxyBtn) proxyBtn.classList.toggle('active', isProxy);
+
+      const d = I18N[currentLang] || I18N.en;
+      if (hintEl) {
+        hintEl.textContent = isProxy ? d.mirrorHintProxy : d.mirrorHintOfficial;
+      }
+    }
+
+    function setMirror(mode) {
+      currentMirror = mode;
+      localStorage.setItem('0rhx_download_mirror', mode);
+      applyDownloadUrls();
+    }
+    window.setMirror = setMirror;
+
+    const mirrorOfficialBtn = document.getElementById('mirrorOfficialBtn');
+    if (mirrorOfficialBtn) {
+      mirrorOfficialBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        setMirror('official');
+      });
+    }
+    const mirrorProxyBtn = document.getElementById('mirrorProxyBtn');
+    if (mirrorProxyBtn) {
+      mirrorProxyBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        setMirror('proxy');
+      });
+    }
+
+    // ========================
+    // 3. Language Detection & State
     // ========================
     function detectLanguage() {
       if (window.__INITIAL_LANG__) {
@@ -1271,6 +1478,9 @@
       if (document.getElementById('heroDesc')) document.getElementById('heroDesc').textContent = d.heroDesc;
       if (document.getElementById('dlSectionTitle')) document.getElementById('dlSectionTitle').textContent = d.dlSectionTitle;
       if (document.getElementById('dlSectionSub')) document.getElementById('dlSectionSub').textContent = d.dlSectionSub;
+      if (document.getElementById('mirrorSelectorTitle')) document.getElementById('mirrorSelectorTitle').textContent = d.mirrorSelectorTitle;
+      if (document.getElementById('mirrorOfficialLabel')) document.getElementById('mirrorOfficialLabel').textContent = d.mirrorOfficialLabel;
+      if (document.getElementById('mirrorProxyLabel')) document.getElementById('mirrorProxyLabel').textContent = d.mirrorProxyLabel;
       if (document.getElementById('desktopCardTitle')) document.getElementById('desktopCardTitle').textContent = d.desktopCardTitle;
       if (document.getElementById('desktopCardSub')) document.getElementById('desktopCardSub').textContent = d.desktopCardSub;
       if (document.getElementById('desktopStatusText')) document.getElementById('desktopStatusText').textContent = d.desktopStatusText;
@@ -1301,6 +1511,7 @@
       if (document.getElementById('feat3Title')) document.getElementById('feat3Title').textContent = d.feat3Title;
       if (document.getElementById('feat3Sub')) document.getElementById('feat3Sub').textContent = d.feat3Sub;
 
+      applyDownloadUrls();
       syncLangSelect(lang);
       document.documentElement.lang = lang === 'zh' ? 'zh-CN' : (lang === 'ja' ? 'ja' : 'en');
 
@@ -1321,15 +1532,19 @@
     // Safeguards against aggressive browser form control restoration on page load
     window.addEventListener('DOMContentLoaded', () => {
       syncLangSelect(currentLang);
+      applyDownloadUrls();
     });
     window.addEventListener('pageshow', () => {
       syncLangSelect(currentLang);
+      applyDownloadUrls();
     });
     setTimeout(() => {
       syncLangSelect(currentLang);
+      applyDownloadUrls();
     }, 0);
     setTimeout(() => {
       syncLangSelect(currentLang);
+      applyDownloadUrls();
     }, 50);
 
     // ========================
@@ -1369,27 +1584,20 @@
       try {
         const res = await fetch('./latest.json?t=' + Date.now());
         if (res.ok) {
-          const data = await res.json();
-          if (data.tag) {
+          releaseData = await res.json();
+          if (releaseData.tag) {
             const tagEl = document.getElementById('desktopTag');
-            if (tagEl) tagEl.textContent = data.tag;
+            if (tagEl) tagEl.textContent = releaseData.tag;
           }
-          if (data.downloads) {
-            const exeUrl = data.downloads.windows_setup_exe || data.downloads.windows_x64_exe;
-            const zipUrl = data.downloads.windows_portable_zip || data.downloads.windows_x64_zip;
-            const exeEl = document.getElementById('winExeBtn');
-            const zipEl = document.getElementById('winZipBtn');
-            if (exeEl && exeUrl) exeEl.href = exeUrl;
-            if (zipEl && zipUrl) zipEl.href = zipUrl;
-          }
-          if (data.htmlUrl) {
+          if (releaseData.htmlUrl) {
             const repoEl = document.getElementById('desktopRepoBtn');
-            if (repoEl) repoEl.href = data.htmlUrl;
+            if (repoEl) repoEl.href = releaseData.htmlUrl;
           }
         }
       } catch (e) {
         // Fallback URLs already baked into HTML
       }
+      applyDownloadUrls();
     }
 
     loadReleaseData();
