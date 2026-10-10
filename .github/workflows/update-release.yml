@@ -1,0 +1,43 @@
+name: Sync Desktop Release
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+  repository_dispatch:
+    types: [desktop-release]
+
+permissions:
+  contents: write
+
+jobs:
+  sync-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch and update release metadata
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release view --repo RinCynar/0rhxPlayer-Desktop --json tagName,name,publishedAt,assets,url | node scripts/update-latest-release.mjs --stdin
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/latest.json
+          if ! git diff --staged --quiet; then
+            NEW_TAG=$(node -e "console.log(JSON.parse(require('fs').readFileSync('docs/latest.json', 'utf8')).tag)")
+            git commit -m "chore(release): sync desktop release metadata to $NEW_TAG"
+            git push
+          else
+            echo "No changes to commit."
+          fi

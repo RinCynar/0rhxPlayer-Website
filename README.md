@@ -22,18 +22,21 @@ The site is a fully self-contained static landing page, deployed to GitHub Pages
 
 ```
 docs/
-├── index.html      # Landing page (bilingual, inline styles & SVG)
-├── info-pic/       # Screenshot assets
-├── icon.png        # App icon (favicon)
-├── latest.json     # Latest release metadata consumed by the page
-└── CNAME           # Custom domain (0rhxplayer.rincynar.top)
+├── index.html                  # Landing page (trilingual: en/zh/ja, inline styles & SVG)
+├── icon.png                    # App icon (favicon)
+├── latest.json                 # Latest release metadata consumed by the page
+└── CNAME                       # Custom domain (0rhxplayer.rincynar.top)
+scripts/
+└── update-latest-release.mjs   # Release metadata fetcher and updater script
 .github/workflows/
-└── pages.yml       # GitHub Pages deployment workflow
+├── pages.yml                   # GitHub Pages deployment workflow
+└── update-release.yml          # Automated release metadata synchronization workflow
 ```
 
-## Deployment
+## Deployment & Automation
 
-Every push to `main` that touches `docs/**` triggers the GitHub Actions workflow (`.github/workflows/pages.yml`), which publishes the `docs/` directory to the custom domain.
+- **Pages Deployment**: Every push to `main` that touches `docs/**` triggers `.github/workflows/pages.yml`, publishing the `docs/` directory to the custom domain.
+- **Automated Release Sync**: `.github/workflows/update-release.yml` periodically queries releases from `RinCynar/0rhxPlayer-Desktop` and updates `docs/latest.json`, keeping download links and version badges up to date automatically.
 
 ---
 

@@ -59,6 +59,10 @@
     /* ==========================================================
        0rhxPlayer Official Landing Page - Material 3 Design
        ========================================================== */
+    html {
+      scroll-behavior: smooth;
+    }
+
     /* Prevent flash of untranslated content (FOCC) */
     html.i18n-pending body {
       visibility: hidden !important;
@@ -332,36 +336,36 @@
       border-radius: 9999px;
       font-size: 0.8rem;
       font-weight: 600;
-      background: rgba(249, 115, 22, 0.12);
-      color: #EA580C;
-      border: 1px solid rgba(249, 115, 22, 0.3);
+      background: rgba(16, 185, 129, 0.12);
+      color: #059669;
+      border: 1px solid rgba(16, 185, 129, 0.28);
       margin-bottom: 16px;
       max-width: 100%;
       text-align: center;
-      box-shadow: 0 2px 10px rgba(249, 115, 22, 0.08);
+      box-shadow: 0 2px 10px rgba(16, 185, 129, 0.08);
       transition: all 0.25s ease;
     }
 
     html.dark .status-banner {
-      background: rgba(249, 115, 22, 0.18);
-      color: #FB923C;
-      border-color: rgba(249, 115, 22, 0.35);
-      box-shadow: 0 4px 16px rgba(249, 115, 22, 0.15);
+      background: rgba(16, 185, 129, 0.18);
+      color: #34D399;
+      border-color: rgba(16, 185, 129, 0.35);
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.12);
     }
 
     .status-dot {
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: #F97316;
-      box-shadow: 0 0 8px #F97316;
+      background: #10B981;
+      box-shadow: 0 0 8px #10B981;
       animation: status-pulse 2s infinite ease-in-out;
       flex-shrink: 0;
     }
 
     html.dark .status-dot {
-      background: #FB923C;
-      box-shadow: 0 0 8px #FB923C;
+      background: #34D399;
+      box-shadow: 0 0 8px #34D399;
     }
 
     @keyframes status-pulse {
@@ -374,9 +378,9 @@
       font-weight: 700;
       padding: 4px 12px;
       border-radius: 9999px;
-      background: rgba(249, 115, 22, 0.14);
-      color: #EA580C;
-      border: 1px solid rgba(249, 115, 22, 0.3);
+      background: rgba(16, 185, 129, 0.12);
+      color: #059669;
+      border: 1px solid rgba(16, 185, 129, 0.28);
       flex-shrink: 0;
       display: inline-flex;
       align-items: center;
@@ -384,9 +388,20 @@
     }
 
     html.dark .tag-badge-status {
-      background: rgba(249, 115, 22, 0.2);
-      color: #FB923C;
-      border-color: rgba(249, 115, 22, 0.35);
+      background: rgba(16, 185, 129, 0.18);
+      color: #34D399;
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .tag-badge {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: var(--primary-container);
+      color: var(--primary);
+      flex-shrink: 0;
     }
 
     .hero h1 {
@@ -847,7 +862,7 @@
       <div class="container hero-content">
         <div class="status-banner">
           <span class="status-dot"></span>
-          <span id="heroStatusText">Desktop: Native Qt Version in Development • Coming Soon</span>
+          <span id="heroStatusText">Desktop: Native Qt 6 v1.1.0 Released</span>
         </div>
 
         <div class="badge">
@@ -863,15 +878,17 @@
         </h1>
 
         <p id="heroDesc">
-          0rhxPlayer Desktop is being rebuilt natively with Qt 6 (C++ / Qt Quick) for a fully native audio pipeline and minimal overhead. The new version is coming soon — follow development on GitHub.
+          0rhxPlayer Desktop is built natively with Qt 6 (C++ / Qt Quick) featuring WASAPI exclusive output and minimal system overhead. v1.1.0 is now available.
         </p>
 
         <div class="hero-actions">
-          <a href="https://github.com/RinCynar/0rhxPlayer-Desktop" target="_blank" class="btn btn-primary" id="heroPrimaryBtn">
+          <a href="#downloads" class="btn btn-primary" id="heroPrimaryBtn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            <span id="heroPrimaryBtnText">View on GitHub</span>
+            <span id="heroPrimaryBtnText">Download Desktop</span>
           </a>
           <a href="https://marketplace.visualstudio.com/items?itemName=RinCynar.0rhxplayer" target="_blank" class="btn btn-outline" id="heroSecondaryBtn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -912,30 +929,45 @@
               <div style="display: flex; gap: 8px; align-items: center; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end;">
                 <span id="desktopStatusBadge" class="tag-badge-status">
                   <span class="status-dot" style="width: 5px; height: 5px;"></span>
-                  <span id="desktopStatusText">Coming Soon</span>
+                  <span id="desktopStatusText">Latest</span>
                 </span>
+                <span id="desktopTag" class="tag-badge">v1.1.0</span>
               </div>
             </div>
 
             <div class="card-body">
               <ul id="desktopFeatureList">
-                <li>Native Qt 6 (C++ / Qt Quick) rebuild in active development</li>
-                <li>BASS audio engine with WASAPI Exclusive output</li>
-                <li>Supports FLAC / WAV / APE / MP3 / AAC / OGG / Opus and more</li>
+                <li>Native Qt 6 (C++ / Qt Quick) client with fluid responsive UI</li>
+                <li>WASAPI Exclusive output with low latency audio pipeline</li>
+                <li>Supports FLAC / WAV / APE / MP3 / AAC / OGG / Opus formats</li>
                 <li>10-Band Equalizer with tuned acoustic presets</li>
                 <li>Bilingual synchronized lyrics with smooth center tracking</li>
               </ul>
             </div>
           </div>
 
-          <!-- Follow Development -->
+          <!-- Download Action Buttons -->
           <div class="card-bottom">
             <div class="download-grid-2x2">
-              <a href="https://github.com/RinCynar/0rhxPlayer-Desktop" target="_blank" class="btn btn-primary btn-m3" style="grid-column: span 2;">
+              <a id="winExeBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.0/0rhxPlayer-v1.1.0-windows-x64-setup.exe" target="_blank" class="btn btn-primary btn-m3">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span id="btnWinExe">Windows Installer (.exe)</span>
+              </a>
+              <a id="winZipBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.0/0rhxPlayer-v1.1.0-windows-x64-portable.zip" target="_blank" class="btn btn-tonal btn-m3">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                </svg>
+                <span id="btnWinZip">Windows Portable (.zip)</span>
+              </a>
+              <a id="desktopRepoBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases" target="_blank" class="btn btn-tonal btn-m3" style="grid-column: span 2;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
                 </svg>
-                <span id="btnDesktopRepo">Follow Development on GitHub</span>
+                <span id="btnDesktopRepo">View Releases on GitHub</span>
               </a>
             </div>
           </div>
@@ -1075,26 +1107,28 @@
         pageTitle: "0rhxPlayer - 轻量本地音乐播放器 (Desktop & VSCode)",
         navDownloads: "下载中心",
         navFeatures: "特性",
-        heroStatusText: "桌面端：原生 Qt 版本开发中 • 即将发布",
+        heroStatusText: "桌面端：Qt 6 原生版 v1.1.0 已发布",
         heroBadge: "Material 3 规范 • 轻量本地音乐播放器",
         heroHeadline1: "简洁清爽的",
         heroHeadline2: "本地音乐播放体验",
-        heroDesc: "0rhxPlayer 桌面端正在以 Qt 6（C++ / Qt Quick）进行原生重建，采用纯原生音频管线与更低的系统开销。新版本即将发布，欢迎在 GitHub 关注开发进展。",
-        heroPrimaryBtnText: "在 GitHub 查看",
+        heroDesc: "0rhxPlayer 桌面端采用 Qt 6（C++ / Qt Quick）与 WASAPI 独占输出原生构建，提供低资源占用的本地音频播放体验。v1.1.0 正式版现已发布。",
+        heroPrimaryBtnText: "下载桌面版",
         heroSecondaryBtnText: "VSCode 插件版",
         dlSectionTitle: "客户端与插件获取",
         dlSectionSub: "选择适合您平台的应用与扩展",
         desktopCardTitle: "0rhxPlayer 桌面端",
         desktopCardSub: "Windows & Linux 原生 Qt 6 客户端",
-        desktopStatusText: "即将发布",
+        desktopStatusText: "最新版",
         desktopFeatures: [
-          "原生 Qt 6（C++ / Qt Quick）重构开发中",
-          "BASS 音频引擎，直通 WASAPI 独占输出",
+          "基于 Qt 6（C++ / Qt Quick）原生构建，界面流畅响应",
+          "支持 WASAPI 独占输出，纯净低延迟音频管线",
           "支持 FLAC / WAV / APE / MP3 / AAC / OGG / Opus 等常见格式",
           "10 段均衡器调节与声学预设",
           "中/日双语动态歌词同步显示与平滑居中滚动"
         ],
-        btnDesktopRepo: "在 GitHub 关注开发",
+        btnWinExe: "Windows 安装包 (.exe)",
+        btnWinZip: "Windows 便携版 (.zip)",
+        btnDesktopRepo: "查看全部版本与源码",
         vscodeCardTitle: "0rhxPlayer for VSCode",
         vscodeCardSub: "VSCode 沉浸式轻量插件",
         vscodeFeatures: [
@@ -1109,7 +1143,7 @@
         featSectionTitle: "主要功能特性",
         featSectionSub: "专注于本地音频收听的实用功能",
         feat1Title: "本地音频解码与 EQ",
-        feat1Sub: "BASS 原生音频引擎直通 WASAPI 独占输出，支持主流无损/有损格式与 10 段均衡器。",
+        feat1Sub: "原生音频引擎直通 WASAPI 独占输出，支持主流无损/有损格式与 10 段均衡器。",
         feat2Title: "双语歌词同步呈现",
         feat2Sub: "支持内嵌与外部 LRC 歌词，提供中/日双语翻译歌词同步显示，支持居中平滑高亮与字号调整。",
         feat3Title: "Material 3 动效与性能",
@@ -1119,26 +1153,28 @@
         pageTitle: "0rhxPlayer - Lightweight Local Music Player (Desktop & VSCode)",
         navDownloads: "Downloads",
         navFeatures: "Features",
-        heroStatusText: "Desktop: Native Qt Version in Development • Coming Soon",
+        heroStatusText: "Desktop: Native Qt 6 v1.1.0 Released",
         heroBadge: "Material 3 Design • Lightweight Local Music Player",
         heroHeadline1: "Clean & Pleasant",
         heroHeadline2: "Local Music Experience",
-        heroDesc: "0rhxPlayer Desktop is being rebuilt natively with Qt 6 (C++ / Qt Quick) for a fully native audio pipeline and minimal overhead. The new version is coming soon — follow development on GitHub.",
-        heroPrimaryBtnText: "View on GitHub",
+        heroDesc: "0rhxPlayer Desktop is built natively with Qt 6 (C++ / Qt Quick) featuring WASAPI exclusive output and minimal system overhead. v1.1.0 is now available.",
+        heroPrimaryBtnText: "Download Desktop",
         heroSecondaryBtnText: "VSCode Extension",
         dlSectionTitle: "Downloads & Releases",
         dlSectionSub: "Get the apps and extension for your platform",
         desktopCardTitle: "0rhxPlayer Desktop",
         desktopCardSub: "Native Qt 6 Client for Windows & Linux",
-        desktopStatusText: "Coming Soon",
+        desktopStatusText: "Latest",
         desktopFeatures: [
-          "Native Qt 6 (C++ / Qt Quick) rebuild in active development",
-          "BASS audio engine with WASAPI Exclusive output",
-          "Supports FLAC / WAV / APE / MP3 / AAC / OGG / Opus and more",
+          "Native Qt 6 (C++ / Qt Quick) client with fluid responsive UI",
+          "WASAPI Exclusive output with low latency audio pipeline",
+          "Supports FLAC / WAV / APE / MP3 / AAC / OGG / Opus formats",
           "10-Band Equalizer with tuned acoustic presets",
           "Bilingual synchronized lyrics with smooth center tracking"
         ],
-        btnDesktopRepo: "Follow Development on GitHub",
+        btnWinExe: "Windows Installer (.exe)",
+        btnWinZip: "Windows Portable (.zip)",
+        btnDesktopRepo: "View Releases on GitHub",
         vscodeCardTitle: "0rhxPlayer for VSCode",
         vscodeCardSub: "Lightweight In-Editor Extension",
         vscodeFeatures: [
@@ -1153,7 +1189,7 @@
         featSectionTitle: "Key Features",
         featSectionSub: "Practical features focused on local music listening",
         feat1Title: "Local Audio Decoding & EQ",
-        feat1Sub: "Native BASS audio engine with WASAPI Exclusive output, supporting major lossless and lossy formats with a 10-band equalizer.",
+        feat1Sub: "Native audio engine with WASAPI Exclusive output, supporting major lossless and lossy formats with a 10-band equalizer.",
         feat2Title: "Bilingual Synchronized Lyrics",
         feat2Sub: "Supports embedded and external LRC lyrics with bilingual translations, font size scaling, and smooth alignment.",
         feat3Title: "Material 3 Motion & Speed",
@@ -1163,26 +1199,28 @@
         pageTitle: "0rhxPlayer - 軽量ローカル音楽プレーヤー (Desktop & VSCode)",
         navDownloads: "ダウンロード",
         navFeatures: "機能紹介",
-        heroStatusText: "デスクトップ版：ネイティブ Qt 版開発中 • 近日公開",
+        heroStatusText: "デスクトップ版：Qt 6 ネイティブ版 v1.1.0 リリース",
         heroBadge: "Material 3 設計 • 軽量ローカル音楽プレーヤー",
         heroHeadline1: "シンプルで心地よい",
         heroHeadline2: "ローカル音楽再生体験",
-        heroDesc: "0rhxPlayer デスクトップ版は Qt 6（C++ / Qt Quick）によるネイティブ再構築を進めており、純正オーディオパイプラインと低いシステムオーバーヘッドを実現します。新版は近日公開予定です。開発の進捗は GitHub で確認できます。",
-        heroPrimaryBtnText: "GitHub で見る",
+        heroDesc: "0rhxPlayer デスクトップ版は Qt 6（C++ / Qt Quick）と WASAPI 排他出力によりネイティブ構築され、軽快なシステム動作とクリアな音質を提供します。v1.1.0 が利用可能です。",
+        heroPrimaryBtnText: "デスクトップ版をダウンロード",
         heroSecondaryBtnText: "VSCode 拡張機能",
         dlSectionTitle: "ダウンロード＆リリース",
         dlSectionSub: "お使いのプラットフォームに合ったアプリと拡張機能",
         desktopCardTitle: "0rhxPlayer デスクトップ版",
         desktopCardSub: "Windows & Linux ネイティブ Qt 6 クライアント",
-        desktopStatusText: "近日公開",
+        desktopStatusText: "最新版",
         desktopFeatures: [
-          "ネイティブ Qt 6（C++ / Qt Quick）による再構築を開発中",
-          "BASS オーディオエンジンで WASAPI Exclusive 出力に対応",
+          "ネイティブ Qt 6（C++ / Qt Quick）による軽快なクライアント",
+          "WASAPI 排他出力による低遅延オーディオパイプライン",
           "FLAC / WAV / APE / MP3 / AAC / OGG / Opus 等の再生に対応",
           "10バンドイコライザー調整＆各種音響プリセット",
           "日中バイリンガル同期歌詞のスムーズスクロール表示"
         ],
-        btnDesktopRepo: "GitHub で開発をフォロー",
+        btnWinExe: "Windows インストーラー (.exe)",
+        btnWinZip: "Windows ポータブル版 (.zip)",
+        btnDesktopRepo: "GitHub で全リリースを見る",
         vscodeCardTitle: "0rhxPlayer for VSCode",
         vscodeCardSub: "エディタ統合型軽量拡張機能",
         vscodeFeatures: [
@@ -1197,7 +1235,7 @@
         featSectionTitle: "主な機能",
         featSectionSub: "ローカル音楽鑑賞に特化した実用機能",
         feat1Title: "ローカルデコード＆EQ",
-        feat1Sub: "BASS ネイティブオーディオエンジンが WASAPI Exclusive 出力に直接対応。主要なロスレス/ロッシー形式と10バンドEQをサポート。",
+        feat1Sub: "ネイティブオーディオエンジンが WASAPI 排他出力に直接対応。主要なロスレス/ロッシー形式と10バンドEQをサポート。",
         feat2Title: "バイリンガル同期歌詞",
         feat2Sub: "内蔵および外部LRC歌詞の解析に対応。日中対訳歌詞の同期表示、中央配置ハイライト、フォントサイズ変更が可能。",
         feat3Title: "Material 3 モーション＆高速描画",
@@ -1263,6 +1301,8 @@
       const dfEl = document.getElementById('desktopFeatureList');
       if (dfEl) dfEl.innerHTML = d.desktopFeatures.map(f => `<li>${f}</li>`).join('');
 
+      if (document.getElementById('btnWinExe')) document.getElementById('btnWinExe').textContent = d.btnWinExe;
+      if (document.getElementById('btnWinZip')) document.getElementById('btnWinZip').textContent = d.btnWinZip;
       if (document.getElementById('btnDesktopRepo')) document.getElementById('btnDesktopRepo').textContent = d.btnDesktopRepo;
 
       if (document.getElementById('vscodeCardTitle')) document.getElementById('vscodeCardTitle').textContent = d.vscodeCardTitle;
@@ -1344,6 +1384,38 @@
       html.classList.remove('dark');
     }
     updateThemeUI();
+
+    // ========================
+    // 5. Release Links Fetcher
+    // ========================
+    async function loadReleaseData() {
+      try {
+        const res = await fetch('./latest.json?t=' + Date.now());
+        if (res.ok) {
+          const data = await res.json();
+          if (data.tag) {
+            const tagEl = document.getElementById('desktopTag');
+            if (tagEl) tagEl.textContent = data.tag;
+          }
+          if (data.downloads) {
+            const exeUrl = data.downloads.windows_setup_exe || data.downloads.windows_x64_exe;
+            const zipUrl = data.downloads.windows_portable_zip || data.downloads.windows_x64_zip;
+            const exeEl = document.getElementById('winExeBtn');
+            const zipEl = document.getElementById('winZipBtn');
+            if (exeEl && exeUrl) exeEl.href = exeUrl;
+            if (zipEl && zipUrl) zipEl.href = zipUrl;
+          }
+          if (data.htmlUrl) {
+            const repoEl = document.getElementById('desktopRepoBtn');
+            if (repoEl) repoEl.href = data.htmlUrl;
+          }
+        }
+      } catch (e) {
+        // Fallback URLs already baked into HTML
+      }
+    }
+
+    loadReleaseData();
   </script>
 
 </body>
