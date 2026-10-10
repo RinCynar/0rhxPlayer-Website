@@ -25,7 +25,8 @@ docs/
 ├── index.html                  # Landing page (trilingual: en/zh/ja, inline styles & SVG)
 ├── icon.png                    # App icon (favicon)
 ├── latest.json                 # Latest release metadata consumed by the page
-└── CNAME                       # Custom domain (0rhxplayer.rincynar.top)
+├── CNAME                       # Custom domain (0rhxplayer.rincynar.top)
+└── screenshots/                # Application preview screenshots (Desktop & VSCode)
 scripts/
 └── update-latest-release.mjs   # Release metadata fetcher and updater script
 .github/workflows/

@@ -25,7 +25,8 @@ docs/
 ├── index.html                  # 落地页（三语支持：en/zh/ja，内联样式与 SVG）
 ├── icon.png                    # 应用图标（favicon）
 ├── latest.json                 # 页面消费的最新版本元数据
-└── CNAME                       # 自定义域名（0rhxplayer.rincynar.top）
+├── CNAME                       # 自定义域名（0rhxplayer.rincynar.top）
+└── screenshots/                # 实机界面预览截图（Desktop 与 VSCode）
 scripts/
 └── update-latest-release.mjs   # 发版元数据抓取与同步脚本
 .github/workflows/

@@ -792,6 +792,100 @@
       line-height: 1.65;
     }
 
+    /* Screenshots Showcase */
+    #screenshots, .screenshots-section {
+      width: 100%;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 24px;
+      padding-right: 24px;
+      margin-top: 56px;
+      margin-bottom: 72px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+
+    .screenshots-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      width: 100%;
+      align-items: stretch;
+      box-sizing: border-box;
+    }
+
+    .screenshot-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 28px;
+      padding: 14px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .screenshot-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.4);
+      border-color: rgba(57, 197, 187, 0.4);
+    }
+
+    .screenshot-frame {
+      width: 100%;
+      aspect-ratio: 2736 / 1728;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--surface-border);
+      background: #131317;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      cursor: zoom-in;
+    }
+
+    .screenshot-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .screenshot-frame:hover img {
+      transform: scale(1.02);
+    }
+
+    .screenshot-caption {
+      text-align: center;
+      padding: 6px 12px 10px;
+      min-height: 52px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .screenshot-caption h4 {
+      font-size: 0.975rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .screenshot-caption p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
     /* Footer */
     footer {
       border-top: 1px solid var(--surface-border);
@@ -820,6 +914,13 @@
         grid-template-columns: 1fr;
         gap: 24px;
       }
+      .screenshots-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .screenshot-card[style*="grid-column: 1 / -1"] {
+        grid-column: auto !important;
+      }
     }
 
     @media (max-width: 640px) {
@@ -835,6 +936,19 @@
       }
       .nav-links .hide-mobile {
         display: none;
+      }
+      #screenshots, .screenshots-section {
+        padding-left: 16px;
+        padding-right: 16px;
+        margin-top: 40px;
+        margin-bottom: 56px;
+      }
+      .screenshot-card {
+        padding: 10px;
+        border-radius: 20px;
+      }
+      .screenshot-frame {
+        border-radius: 14px;
       }
       .hero {
         padding: 40px 0 28px;
@@ -912,6 +1026,7 @@
         <!-- Navigation & Controls -->
         <div class="nav-links">
           <a href="#downloads" class="nav-link hide-mobile" id="navDownloads">Downloads</a>
+          <a href="#screenshots" class="nav-link hide-mobile" id="navScreenshots">Screenshots</a>
           <a href="#features" class="nav-link hide-mobile" id="navFeatures">Features</a>
 
           <!-- Controls: Lang Selector & Theme Toggle -->
@@ -1140,6 +1255,71 @@
       </div>
     </section>
 
+    <!-- Screenshots Showcase -->
+    <section id="screenshots" class="container screenshots-section">
+      <div class="section-title">
+        <h2 id="ssSectionTitle">Application Screenshots</h2>
+        <p id="ssSectionSub">Clean UI crafted with Material Design 3</p>
+      </div>
+
+      <div class="screenshots-grid">
+        <!-- 1. Desktop Home -->
+        <div class="screenshot-card">
+          <a href="screenshots/desktop-home.png" target="_blank" rel="noopener" class="screenshot-frame">
+            <img src="screenshots/desktop-home.png" alt="Desktop Home & Library" loading="lazy" decoding="async" />
+          </a>
+          <div class="screenshot-caption">
+            <h4 id="ss1Title">Desktop - Home & Library View</h4>
+            <p id="ss1Sub">Adaptive sidebar, personalized greeting, and local music tracks</p>
+          </div>
+        </div>
+
+        <!-- 2. Desktop NowPlaying -->
+        <div class="screenshot-card">
+          <a href="screenshots/desktop-nowplaying.png" target="_blank" rel="noopener" class="screenshot-frame">
+            <img src="screenshots/desktop-nowplaying.png" alt="Desktop NowPlaying & Lyrics" loading="lazy" decoding="async" />
+          </a>
+          <div class="screenshot-caption">
+            <h4 id="ss2Title">Desktop - NowPlaying & Lyrics</h4>
+            <p id="ss2Sub">Pure black canvas, high-res cover art, and smooth centered scrolling lyrics</p>
+          </div>
+        </div>
+
+        <!-- 3. Desktop Search -->
+        <div class="screenshot-card">
+          <a href="screenshots/desktop-search.png" target="_blank" rel="noopener" class="screenshot-frame">
+            <img src="screenshots/desktop-search.png" alt="Desktop Search & Filtering" loading="lazy" decoding="async" />
+          </a>
+          <div class="screenshot-caption">
+            <h4 id="ss3Title">Desktop - Search & Filtering</h4>
+            <p id="ss3Sub">Instant local music library filtering by title, artist, or album</p>
+          </div>
+        </div>
+
+        <!-- 4. Desktop EQ -->
+        <div class="screenshot-card">
+          <a href="screenshots/desktop-eq.png" target="_blank" rel="noopener" class="screenshot-frame">
+            <img src="screenshots/desktop-eq.png" alt="Desktop 10-Band Equalizer" loading="lazy" decoding="async" />
+          </a>
+          <div class="screenshot-caption">
+            <h4 id="ss4Title">Desktop - 10-Band Equalizer</h4>
+            <p id="ss4Sub">Fine-grained frequency control and presets over WASAPI exclusive output</p>
+          </div>
+        </div>
+
+        <!-- 5. VSCode Extension -->
+        <div class="screenshot-card" style="grid-column: 1 / -1;">
+          <a href="screenshots/vscode.png" target="_blank" rel="noopener" class="screenshot-frame">
+            <img src="screenshots/vscode.png" alt="VSCode Extension Preview" loading="lazy" decoding="async" />
+          </a>
+          <div class="screenshot-caption">
+            <h4 id="ss5Title">VSCode Extension - In-Editor Player</h4>
+            <p id="ss5Sub">Status bar controls and sidebar explorer for distraction-free coding</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Features -->
     <section id="features" class="container">
       <div class="section-title">
@@ -1215,6 +1395,7 @@
       zh: {
         pageTitle: "0rhxPlayer - 轻量本地音乐播放器 (Desktop & VSCode)",
         navDownloads: "下载中心",
+        navScreenshots: "界面预览",
         navFeatures: "特性",
         heroStatusText: "桌面端：Qt 6 原生版 v1.1.0 已发布",
         heroBadge: "Material 3 规范 • 轻量本地音乐播放器",
@@ -1252,6 +1433,18 @@
         btnVscodeMarketplace: "VSCode 市场安装",
         btnVscodeVsix: "下载 VSIX 离线包",
         btnVscodeRepo: "查看 VSCode 插件源码仓库",
+        ssSectionTitle: "应用界面预览",
+        ssSectionSub: "遵循 Material Design 3 规范的原生界面设计",
+        ss1Title: "桌面端 - 主页与曲库视图",
+        ss1Sub: "自适应侧边栏、问候语与本地曲目展示",
+        ss2Title: "桌面端 - 播放详情与双语歌词",
+        ss2Sub: "纯净黑色背景、高解析度专辑封面与平滑居中同步歌词",
+        ss3Title: "桌面端 - 快速检索与过滤",
+        ss3Sub: "即时搜索本地曲库，毫秒级定位目标音乐与歌手",
+        ss4Title: "桌面端 - 10 段参数均衡器",
+        ss4Sub: "多频段参数调节与预设切换，直通 WASAPI 独占音频管线",
+        ss5Title: "VSCode 插件版 - 编辑器内播放体验",
+        ss5Sub: "状态栏控制器、侧边栏本地曲库、沉浸编码不分心",
         featSectionTitle: "主要功能特性",
         featSectionSub: "专注于本地音频收听的实用功能",
         feat1Title: "本地音频解码与 EQ",
@@ -1264,6 +1457,7 @@
       en: {
         pageTitle: "0rhxPlayer - Lightweight Local Music Player (Desktop & VSCode)",
         navDownloads: "Downloads",
+        navScreenshots: "Screenshots",
         navFeatures: "Features",
         heroStatusText: "Desktop: Native Qt 6 v1.1.0 Released",
         heroBadge: "Material 3 Design • Lightweight Local Music Player",
@@ -1302,6 +1496,18 @@
         btnVscodeMarketplace: "Install from Marketplace",
         btnVscodeVsix: "Download VSIX Package",
         btnVscodeRepo: "View Extension Repository on GitHub",
+        ssSectionTitle: "Application Screenshots",
+        ssSectionSub: "Clean UI crafted with Material Design 3",
+        ss1Title: "Desktop - Home & Library View",
+        ss1Sub: "Adaptive sidebar, personalized greeting, and local music tracks",
+        ss2Title: "Desktop - NowPlaying & Lyrics",
+        ss2Sub: "Pure black canvas, high-res cover art, and smooth centered scrolling lyrics",
+        ss3Title: "Desktop - Search & Filtering",
+        ss3Sub: "Instant local music library filtering by title, artist, or album",
+        ss4Title: "Desktop - 10-Band Equalizer",
+        ss4Sub: "Fine-grained frequency control and presets over WASAPI exclusive output",
+        ss5Title: "VSCode Extension - In-Editor Player",
+        ss5Sub: "Status bar controls and sidebar explorer for distraction-free coding",
         featSectionTitle: "Key Features",
         featSectionSub: "Practical features focused on local music listening",
         feat1Title: "Local Audio Decoding & EQ",
@@ -1314,6 +1520,7 @@
       ja: {
         pageTitle: "0rhxPlayer - 軽量ローカル音楽プレーヤー (Desktop & VSCode)",
         navDownloads: "ダウンロード",
+        navScreenshots: "スクリーンショット",
         navFeatures: "機能紹介",
         heroStatusText: "デスクトップ版：Qt 6 ネイティブ版 v1.1.0 リリース",
         heroBadge: "Material 3 設計 • 軽量ローカル音楽プレーヤー",
@@ -1351,6 +1558,18 @@
         btnVscodeMarketplace: "マーケットプレイスからインストール",
         btnVscodeVsix: "VSIX パッケージをダウンロード",
         btnVscodeRepo: "拡張機能の GitHub リポジトリを見る",
+        ssSectionTitle: "アプリケーション画面",
+        ssSectionSub: "Material Design 3 に準拠したインターフェース",
+        ss1Title: "デスクトップ版 - ホーム＆ライブラリ画面",
+        ss1Sub: "適応型サイドバー、挨拶表示、ローカル楽曲リスト",
+        ss2Title: "デスクトップ版 - 再生画面＆バイリンガル歌詞",
+        ss2Sub: "ピュアブラック背景、高解像度アルバムアート、同期歌詞表示",
+        ss3Title: "デスクトップ版 - 楽曲検索＆フィルター",
+        ss3Sub: "ローカルライブラリを瞬時に検索、曲名・アーティストで素早く抽出",
+        ss4Title: "デスクトップ版 - 10バンドイコライザー",
+        ss4Sub: "周波数帯域の微調整とプリセット切り替え、WASAPI 排他出力に直結",
+        ss5Title: "VSCode 拡張機能 - エディタ内再生",
+        ss5Sub: "ステータスバー常駐コントローラーとサイドバー曲庫、コーディングを邪魔しない軽量設計",
         featSectionTitle: "主な機能",
         featSectionSub: "ローカル音楽鑑賞に特化した実用機能",
         feat1Title: "ローカルデコード＆EQ",
@@ -1470,6 +1689,7 @@
 
       if (document.getElementById('pageTitle')) document.getElementById('pageTitle').textContent = d.pageTitle;
       if (document.getElementById('navDownloads')) document.getElementById('navDownloads').textContent = d.navDownloads;
+      if (document.getElementById('navScreenshots')) document.getElementById('navScreenshots').textContent = d.navScreenshots;
       if (document.getElementById('navFeatures')) document.getElementById('navFeatures').textContent = d.navFeatures;
       if (document.getElementById('heroStatusText')) document.getElementById('heroStatusText').textContent = d.heroStatusText;
       if (document.getElementById('heroBadge')) document.getElementById('heroBadge').textContent = d.heroBadge;
@@ -1501,6 +1721,19 @@
       if (document.getElementById('btnVscodeMarketplace')) document.getElementById('btnVscodeMarketplace').textContent = d.btnVscodeMarketplace;
       if (document.getElementById('btnVscodeVsix')) document.getElementById('btnVscodeVsix').textContent = d.btnVscodeVsix;
       if (document.getElementById('btnVscodeRepo')) document.getElementById('btnVscodeRepo').textContent = d.btnVscodeRepo;
+
+      if (document.getElementById('ssSectionTitle')) document.getElementById('ssSectionTitle').textContent = d.ssSectionTitle;
+      if (document.getElementById('ssSectionSub')) document.getElementById('ssSectionSub').textContent = d.ssSectionSub;
+      if (document.getElementById('ss1Title')) document.getElementById('ss1Title').textContent = d.ss1Title;
+      if (document.getElementById('ss1Sub')) document.getElementById('ss1Sub').textContent = d.ss1Sub;
+      if (document.getElementById('ss2Title')) document.getElementById('ss2Title').textContent = d.ss2Title;
+      if (document.getElementById('ss2Sub')) document.getElementById('ss2Sub').textContent = d.ss2Sub;
+      if (document.getElementById('ss3Title')) document.getElementById('ss3Title').textContent = d.ss3Title;
+      if (document.getElementById('ss3Sub')) document.getElementById('ss3Sub').textContent = d.ss3Sub;
+      if (document.getElementById('ss4Title')) document.getElementById('ss4Title').textContent = d.ss4Title;
+      if (document.getElementById('ss4Sub')) document.getElementById('ss4Sub').textContent = d.ss4Sub;
+      if (document.getElementById('ss5Title')) document.getElementById('ss5Title').textContent = d.ss5Title;
+      if (document.getElementById('ss5Sub')) document.getElementById('ss5Sub').textContent = d.ss5Sub;
 
       if (document.getElementById('featSectionTitle')) document.getElementById('featSectionTitle').textContent = d.featSectionTitle;
       if (document.getElementById('featSectionSub')) document.getElementById('featSectionSub').textContent = d.featSectionSub;
