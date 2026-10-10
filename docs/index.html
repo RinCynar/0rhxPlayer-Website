@@ -1,31 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <script>
     (function() {
       try {
-        var saved = localStorage.getItem('0rhx_lang');
-        var lang = (saved && ['zh', 'en', 'ja'].indexOf(saved) !== -1) ? saved : null;
-        if (!lang) {
-          var navLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
-          if (navLang.indexOf('zh') === 0) lang = 'zh';
-          else if (navLang.indexOf('ja') === 0) lang = 'ja';
-          else lang = 'en';
-        }
-        window.__INITIAL_LANG__ = lang;
-        document.documentElement.lang = (lang === 'zh' ? 'zh-CN' : (lang === 'ja' ? 'ja' : 'en'));
-        document.documentElement.setAttribute('data-lang', lang);
-
-        // Immediate Theme initialization to prevent theme flashing
         var savedTheme = localStorage.getItem('0rhx_theme');
-        if (savedTheme === 'light') {
-          document.documentElement.classList.remove('dark');
-        } else {
+        var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
           document.documentElement.classList.add('dark');
         }
 
-        // Base static HTML is in English. Only conceal for non-English users while translating
+        var savedLang = localStorage.getItem('0rhx_lang');
+        var navLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+        var lang = 'en';
+        if (savedLang && ['zh', 'en', 'ja'].includes(savedLang)) {
+          lang = savedLang;
+        } else if (navLang.startsWith('zh')) {
+          lang = 'zh';
+        } else if (navLang.startsWith('ja')) {
+          lang = 'ja';
+        }
+        window.__INITIAL_LANG__ = lang;
+
         if (lang !== 'en') {
           document.documentElement.classList.add('i18n-pending');
           if (lang === 'zh') {
@@ -35,107 +32,100 @@
           }
         }
 
-        // Safety fallback watchdog to guarantee page visibility
         setTimeout(function() {
           document.documentElement.classList.remove('i18n-pending');
-        }, 350);
+        }, 300);
       } catch (e) {}
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <title id="pageTitle">0rhxPlayer - Lightweight Local Music Player (Desktop & VSCode)</title>
-  <meta name="description" content="0rhxPlayer is a lightweight local music player crafted with Material 3 design, supporting Windows / Linux desktop and VSCode." />
-  <meta name="keywords" content="0rhxPlayer, Music Player, Local Music, Material You, Material 3, Qt, C++, Qt Quick, VSCode Extension, RinCynar" />
+  <meta name="description" content="0rhxPlayer is an elegant, lightweight local music player crafted with Material 3 design, supporting Windows / Linux desktop and VSCode." />
+  <meta name="keywords" content="0rhxPlayer, Music Player, Local Music, Material You, Material 3, Qt 6, C++, Qt Quick, VSCode Extension, RinCynar" />
 
   <!-- Favicon -->
   <link rel="icon" href="icon.png" type="image/png" />
 
-  <!-- Google Fonts: Google Sans Flex & Noto Sans SC & Noto Sans JP & Noto Sans -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
 
   <style>
     /* ==========================================================
-       0rhxPlayer Official Landing Page - Material 3 Design
+       0rhxPlayer Official Website - Authentic Material You (M3)
+       Palette: Direct seed #39C5BB Teal from Theme.qml
        ========================================================== */
     html {
       scroll-behavior: smooth;
     }
 
-    /* Prevent flash of untranslated content (FOCC) */
     html.i18n-pending body {
       visibility: hidden !important;
       opacity: 0 !important;
     }
 
+    /* M3 Teal Tokens - Light Mode */
     :root {
-      --bg: #F6F2F8;
-      --bg-elevated: #EDE7F0;
-      --header-bg: rgba(246, 242, 248, 0.88);
-      --surface: #FFFFFF;
-      --surface-border: rgba(0, 0, 0, 0.08);
-      --surface-hover: rgba(0, 0, 0, 0.04);
-      --text-main: #1D1B20;
-      --text-muted: #65636D;
-      --text-sub: #8B8794;
-      --primary: #006A6B;
-      --primary-hover: #005657;
-      --primary-on: #FFFFFF;
-      --primary-container: rgba(0, 106, 107, 0.12);
-      --miku: #39C5BB;
-      --tonal-bg: rgba(0, 106, 107, 0.08);
-      --tonal-text: #006A6B;
-      --tonal-border: rgba(0, 106, 107, 0.18);
-      --accent-blue: #0284C7;
-      --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+      --md-sys-color-background: #F4FBFA;
+      --md-sys-color-surface: #F4FBFA;
+      --md-sys-color-surface-container-lowest: #FFFFFF;
+      --md-sys-color-surface-container-low: #EFF5F4;
+      --md-sys-color-surface-container: #E9EFEF;
+      --md-sys-color-surface-container-high: #E3EAE9;
+      --md-sys-color-surface-container-highest: #DEE4E3;
+      --md-sys-color-on-surface: #161D1D;
+      --md-sys-color-on-surface-variant: #3F4948;
+      --md-sys-color-outline: #6F7979;
+      --md-sys-color-outline-variant: #D5DFDE;
+      --md-sys-color-primary: #006A6B;
+      --md-sys-color-on-primary: #FFFFFF;
+      --md-sys-color-primary-container: #CCE8E7;
+      --md-sys-color-on-primary-container: #002021;
+      --md-sys-color-secondary-container: #DAE5E4;
+      --md-sys-color-on-secondary-container: #051F20;
+      --header-bg: rgba(244, 251, 250, 0.88);
       --font-brand: 'Google Sans Flex', 'Google Sans', 'Noto Sans', sans-serif;
-      --font: 'Noto Sans', 'Noto Sans SC', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --font: 'Noto Sans', 'Noto Sans SC', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
+    /* M3 Teal Tokens - Dark Mode */
     html.dark {
-      --bg: #131317;
-      --bg-elevated: #1A1921;
-      --header-bg: rgba(19, 19, 23, 0.88);
-      --surface: #1E1D24;
-      --surface-border: rgba(255, 255, 255, 0.08);
-      --surface-hover: rgba(255, 255, 255, 0.05);
-      --text-main: #E6E1E5;
-      --text-muted: #A19DA8;
-      --text-sub: #75717E;
-      --primary: #39C5BB;
-      --primary-hover: #4FE1D7;
-      --primary-on: #003738;
-      --primary-container: rgba(57, 197, 187, 0.15);
-      --miku: #39C5BB;
-      --tonal-bg: rgba(255, 255, 255, 0.06);
-      --tonal-text: #E6E1E5;
-      --tonal-border: rgba(255, 255, 255, 0.1);
-      --accent-blue: #38BDF8;
-      --card-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.45), 0 4px 16px -2px rgba(0, 0, 0, 0.3);
+      --md-sys-color-background: #0E1514;
+      --md-sys-color-surface: #0E1514;
+      --md-sys-color-surface-container-lowest: #090F0F;
+      --md-sys-color-surface-container-low: #161D1D;
+      --md-sys-color-surface-container: #1A2121;
+      --md-sys-color-surface-container-high: #252B2B;
+      --md-sys-color-surface-container-highest: #303636;
+      --md-sys-color-on-surface: #DEE4E3;
+      --md-sys-color-on-surface-variant: #BEC9C8;
+      --md-sys-color-outline: #889392;
+      --md-sys-color-outline-variant: #2A3332;
+      --md-sys-color-primary: #39C5BB;
+      --md-sys-color-on-primary: #003738;
+      --md-sys-color-primary-container: #004F50;
+      --md-sys-color-on-primary-container: #70F7EC;
+      --md-sys-color-secondary-container: #273737;
+      --md-sys-color-on-secondary-container: #CCE8E7;
+      --header-bg: rgba(14, 21, 20, 0.88);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-    }
-
-    html, body {
-      width: 100%;
-      max-width: 100vw;
-      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
     body {
-      background-color: var(--bg);
-      color: var(--text-main);
+      background-color: var(--md-sys-color-background);
+      color: var(--md-sys-color-on-surface);
       font-family: var(--font);
       line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
+      padding-top: 72px;
       transition: background-color 0.25s ease, color 0.25s ease;
-      padding-top: 68px; /* Safe offset for fixed header */
+      overflow-x: hidden;
     }
 
     a {
@@ -143,783 +133,618 @@
       text-decoration: none;
     }
 
-    /* Container & Main Centering */
-    main {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      box-sizing: border-box;
-      overflow-x: hidden;
-    }
-
     .container {
       width: 100%;
-      max-width: 1200px;
-      margin-left: auto !important;
-      margin-right: auto !important;
-      padding-left: 24px;
-      padding-right: 24px;
-      box-sizing: border-box;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
     }
 
-    /* Header - Responsive Full-Width Fixed Navbar */
+    /* ==========================================================
+       Header & Navbar
+       ========================================================== */
     header {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      width: 100%;
-      z-index: 1000;
-      background-color: var(--bg);
-      border-bottom: 1px solid var(--surface-border);
-      transition: background-color 0.25s ease, border-color 0.25s ease;
+      height: 72px;
+      background: var(--header-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 100;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      transition: background 0.25s ease, border-color 0.25s ease;
     }
 
     .header-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-      height: 68px;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      width: 100%;
-      box-sizing: border-box;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
     }
 
     .brand {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      flex-shrink: 0;
+      gap: 12px;
     }
 
     .brand-icon {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 12px;
-      background: var(--primary-container);
-      color: var(--primary);
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
+    }
+
+    .brand-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .brand-title {
       font-family: var(--font-brand);
-      font-size: 1.15rem;
-      font-weight: 800;
+      font-size: 1.25rem;
+      font-weight: 700;
       letter-spacing: -0.02em;
-      line-height: 1.2;
-    }
-
-    .brand-tag {
-      font-size: 0.65rem;
-      font-family: var(--font-mono);
-      font-weight: 600;
-      color: var(--text-sub);
-      display: block;
-      letter-spacing: 0.06em;
-      line-height: 1;
-      margin-top: 2px;
+      color: var(--md-sys-color-on-surface);
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 14px;
-      font-size: 0.875rem;
-      font-weight: 500;
+      gap: 8px;
     }
 
     .nav-link {
-      color: var(--text-muted);
-      transition: color 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface-variant);
+      transition: all 0.2s ease;
     }
 
     .nav-link:hover {
-      color: var(--primary);
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-surface);
     }
 
-    /* Controls: Lang Selector & Theme Switcher */
     .controls-group {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 8px;
-      flex-shrink: 0;
+      margin-left: 12px;
     }
 
     .select-btn {
-      height: 36px;
-      padding: 0 10px;
+      appearance: none;
+      -webkit-appearance: none;
+      background: var(--md-sys-color-surface-container);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      color: var(--md-sys-color-on-surface);
       border-radius: 9999px;
-      border: 1px solid var(--surface-border);
-      background: var(--surface);
-      color: var(--text-main);
-      font-size: 0.775rem;
+      padding: 6px 14px;
+      font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      transition: all 0.2s;
-      outline: none;
+      font-family: inherit;
+      transition: all 0.2s ease;
     }
 
     .select-btn:hover {
-      border-color: var(--primary);
-      background: var(--surface-hover);
+      background: var(--md-sys-color-surface-container-high);
     }
 
-    .theme-btn {
+    .icon-btn {
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      border: 1px solid var(--surface-border);
-      background: var(--surface);
-      color: var(--text-main);
-      cursor: pointer;
+      border: 1px solid var(--md-sys-color-outline-variant);
+      background: var(--md-sys-color-surface-container);
+      color: var(--md-sys-color-on-surface);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
-      flex-shrink: 0;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
-    .theme-btn:hover {
-      background: var(--surface-hover);
-      border-color: var(--primary);
+    .icon-btn:hover {
+      background: var(--md-sys-color-surface-container-high);
+      transform: rotate(15deg);
     }
 
-    /* Hero */
+    /* ==========================================================
+       Hero Section
+       ========================================================== */
     .hero {
-      position: relative;
-      padding: 56px 0 40px;
+      padding: 72px 0 48px;
       text-align: center;
-      width: 100%;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 780px;
-      margin: 0 auto;
-    }
-
-    .badge {
-      display: inline-flex;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 6px;
-      padding: 6px 16px;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      background: var(--primary-container);
-      color: var(--primary);
-      margin-bottom: 20px;
-      max-width: 100%;
-      text-align: center;
     }
 
-    .status-banner {
+    .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 7px 18px;
+      padding: 6px 16px;
       border-radius: 9999px;
-      font-size: 0.8rem;
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      font-size: 0.8125rem;
       font-weight: 600;
-      background: rgba(16, 185, 129, 0.12);
-      color: #059669;
-      border: 1px solid rgba(16, 185, 129, 0.28);
-      margin-bottom: 16px;
-      max-width: 100%;
-      text-align: center;
-      box-shadow: 0 2px 10px rgba(16, 185, 129, 0.08);
-      transition: all 0.25s ease;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
 
-    html.dark .status-banner {
-      background: rgba(16, 185, 129, 0.18);
-      color: #34D399;
-      border-color: rgba(16, 185, 129, 0.35);
-      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.12);
-    }
-
-    .status-dot {
+    .hero-dot {
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: #10B981;
-      box-shadow: 0 0 8px #10B981;
-      animation: status-pulse 2s infinite ease-in-out;
-      flex-shrink: 0;
-    }
-
-    html.dark .status-dot {
-      background: #34D399;
-      box-shadow: 0 0 8px #34D399;
-    }
-
-    @keyframes status-pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.35; transform: scale(0.8); }
-    }
-
-    .tag-badge-status {
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 4px 12px;
-      border-radius: 9999px;
-      background: rgba(16, 185, 129, 0.12);
-      color: #059669;
-      border: 1px solid rgba(16, 185, 129, 0.28);
-      flex-shrink: 0;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    html.dark .tag-badge-status {
-      background: rgba(16, 185, 129, 0.18);
-      color: #34D399;
-      border-color: rgba(16, 185, 129, 0.35);
-    }
-
-    .tag-badge {
-      font-size: 0.75rem;
-      font-family: var(--font-mono);
-      font-weight: 600;
-      padding: 4px 12px;
-      border-radius: 9999px;
-      background: var(--primary-container);
-      color: var(--primary);
-      flex-shrink: 0;
+      background: var(--md-sys-color-primary);
     }
 
     .hero h1 {
-      font-size: 2.85rem;
-      font-weight: 800;
+      font-family: var(--font-brand);
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1.15;
       letter-spacing: -0.03em;
-      line-height: 1.2;
-      margin-bottom: 18px;
-    }
-
-    .highlight-text {
-      color: var(--primary);
+      margin-bottom: 20px;
+      max-width: 800px;
+      color: var(--md-sys-color-on-surface);
     }
 
     .hero p {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      max-width: 660px;
-      margin: 0 auto 30px;
+      font-size: 1.125rem;
+      color: var(--md-sys-color-on-surface-variant);
+      max-width: 680px;
+      line-height: 1.6;
     }
 
-    .hero-actions {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    /* Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px 26px;
-      border-radius: 9999px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
-      border: 1px solid transparent;
-      text-align: center;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: var(--primary-on);
-      box-shadow: 0 4px 14px rgba(57, 197, 187, 0.25);
-    }
-
-    .btn-primary:hover {
-      opacity: 0.9;
-      box-shadow: 0 6px 18px rgba(57, 197, 187, 0.3);
-    }
-
-    .btn-tonal {
-      background: var(--tonal-bg);
-      color: var(--tonal-text);
-      border-color: var(--tonal-border);
-    }
-
-    .btn-tonal:hover {
-      background: var(--surface-hover);
-      border-color: var(--primary);
-    }
-
-    .btn-outline {
-      background: var(--surface);
-      color: var(--text-main);
-      border-color: var(--surface-border);
-    }
-
-    .btn-outline:hover {
-      background: var(--surface-hover);
-      border-color: var(--primary);
-    }
-
-    /* M3 state layer: visible keyboard focus ring */
-    :focus-visible {
-      outline: 2px solid var(--primary);
-      outline-offset: 2px;
-      border-radius: 4px;
-    }
-
-    /* Section Title Standard Centering */
+    /* ==========================================================
+       Section Common
+       ========================================================== */
     .section-title {
       text-align: center;
       margin-bottom: 36px;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
     }
 
     .section-title h2 {
-      font-size: 1.85rem;
+      font-family: var(--font-brand);
+      font-size: 2rem;
       font-weight: 700;
       letter-spacing: -0.02em;
-      margin-bottom: 6px;
-      text-align: center;
-      width: 100%;
+      color: var(--md-sys-color-on-surface);
+      margin-bottom: 8px;
     }
 
     .section-title p {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      text-align: center;
-      width: 100%;
+      font-size: 0.95rem;
+      color: var(--md-sys-color-on-surface-variant);
     }
 
-    /* Mirror Selector Switch */
-    .mirror-selector-wrapper {
+    /* ==========================================================
+       Downloads Section & M3 Segmented Button
+       ========================================================== */
+    #downloads {
+      padding: 48px 0 64px;
+    }
+
+    .mirror-switch-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 30px;
+      margin-bottom: 36px;
       gap: 10px;
-      width: 100%;
     }
 
-    .mirror-selector {
+    .m3-segmented-group {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
-      padding: 6px 10px 6px 16px;
-      background: var(--surface);
-      border: 1px solid var(--surface-border);
+      padding: 4px;
+      background: var(--md-sys-color-surface-container);
+      border: 1px solid var(--md-sys-color-outline-variant);
       border-radius: 9999px;
-      box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.05);
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .mirror-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    .mirror-options {
-      display: inline-flex;
-      align-items: center;
       gap: 4px;
-      background: var(--bg-elevated);
-      padding: 3px;
-      border-radius: 9999px;
     }
 
-    .mirror-btn {
+    .m3-segmented-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
+      gap: 8px;
+      padding: 8px 20px;
       border-radius: 9999px;
-      font-size: 0.775rem;
-      font-weight: 600;
       border: none;
       background: transparent;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.05, 0.7, 0.1, 1.0);
+      color: var(--md-sys-color-on-surface-variant);
       font-family: inherit;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
     }
 
-    .mirror-btn:hover {
-      color: var(--text-main);
+    .m3-segmented-btn:hover {
+      color: var(--md-sys-color-on-surface);
     }
 
-    .mirror-btn.active {
-      background: var(--primary);
-      color: var(--primary-on);
-      box-shadow: 0 2px 8px rgba(0, 106, 107, 0.28);
+    .m3-segmented-btn.active {
+      background: var(--md-sys-color-surface-container-lowest);
+      color: var(--md-sys-color-primary);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
     }
 
-    html.dark .mirror-btn.active {
-      background: var(--primary);
-      color: var(--primary-on);
-      box-shadow: 0 2px 10px rgba(57, 197, 187, 0.35);
+    html.dark .m3-segmented-btn.active {
+      background: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-primary);
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
     }
 
-    .mirror-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: currentColor;
-      display: none;
-      animation: status-pulse 2s infinite ease-in-out;
-    }
-
-    .mirror-btn.active .mirror-dot {
-      display: inline-block;
-    }
-
-    .mirror-hint {
-      font-size: 0.75rem;
-      color: var(--text-sub);
-      text-align: center;
+    .mirror-hint-text {
+      font-size: 0.775rem;
+      color: var(--md-sys-color-on-surface-variant);
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: var(--tonal-bg);
-      border: 1px solid var(--tonal-border);
-      padding: 4px 14px;
-      border-radius: 9999px;
-      max-width: 92%;
     }
 
-    /* Downloads Matrix - Equal Height & 2x2 Clean Grid */
-    .card-grid {
+    /* Cards Grid */
+    .download-cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-      gap: 32px;
-      align-items: stretch;
-      margin-bottom: 56px;
-      width: 100%;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
     }
 
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--surface-border);
+    .m3-card {
+      background: var(--md-sys-color-surface-container-low);
+      border: 1px solid var(--md-sys-color-outline-variant);
       border-radius: 28px;
       padding: 32px;
-      box-shadow: var(--card-shadow);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      height: 100%;
-      transition: transform 0.25s ease, border-color 0.25s ease;
-      box-sizing: border-box;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .card:hover {
-      border-color: rgba(57, 197, 187, 0.4);
+    .m3-card:hover {
+      border-color: var(--md-sys-color-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.12);
     }
 
-    .card-top {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .card-header {
+    .card-head {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .card-brand {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
     }
 
-    .card-icon {
-      width: 52px;
-      height: 52px;
+    .card-icon-box {
+      width: 48px;
+      height: 48px;
       border-radius: 16px;
-      background: var(--primary-container);
-      color: var(--primary);
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-primary);
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
     }
 
     .card-brand h3 {
+      font-family: var(--font-brand);
       font-size: 1.25rem;
       font-weight: 700;
+      color: var(--md-sys-color-on-surface);
     }
 
     .card-brand p {
-      font-size: 0.8rem;
-      color: var(--text-muted);
+      font-size: 0.8125rem;
+      color: var(--md-sys-color-on-surface-variant);
     }
 
-    .card-body {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      background: var(--bg-elevated);
-      padding: 18px 20px;
-      border-radius: 20px;
-      margin-bottom: 24px;
-      line-height: 1.7;
-      flex: 1;
+    .tag-badge {
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+    }
+
+    .card-desc {
+      font-size: 0.875rem;
+      color: var(--md-sys-color-on-surface-variant);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    /* M3 Button Styles */
+    .card-actions {
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      min-height: 140px;
+      gap: 10px;
     }
 
-    .card-body ul {
-      list-style: none;
-    }
-
-    .card-body li {
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      margin-bottom: 5px;
-    }
-
-    .card-body li::before {
-      content: "•";
-      color: var(--primary);
-      font-weight: bold;
-    }
-
-    .card-bottom {
-      margin-top: auto;
-      border-top: 1px solid var(--surface-border);
-      padding-top: 20px;
-      width: 100%;
-    }
-
-    .download-grid-2x2 {
+    .btn-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      width: 100%;
-      box-sizing: border-box;
+      gap: 10px;
     }
 
     .btn-m3 {
-      height: 46px;
-      padding: 0 16px;
-      font-size: 0.825rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 44px;
+      padding: 0 20px;
+      border-radius: 9999px;
+      font-size: 0.8125rem;
       font-weight: 600;
-      border-radius: 16px;
-      width: 100%;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+      text-align: center;
+    }
+
+    .btn-m3-filled {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+    }
+
+    .btn-m3-filled:hover {
+      filter: brightness(1.08);
+      box-shadow: 0 4px 12px rgba(0, 106, 107, 0.2);
+    }
+
+    html.dark .btn-m3-filled:hover {
+      box-shadow: 0 4px 16px rgba(57, 197, 187, 0.3);
+    }
+
+    .btn-m3-tonal {
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+    }
+
+    .btn-m3-tonal:hover {
+      filter: brightness(0.96);
+    }
+
+    html.dark .btn-m3-tonal:hover {
+      filter: brightness(1.15);
+    }
+
+    .btn-m3-text {
+      background: transparent;
+      color: var(--md-sys-color-primary);
+      font-size: 0.8125rem;
+      height: 38px;
+    }
+
+    .btn-m3-text:hover {
+      background: var(--md-sys-color-secondary-container);
+    }
+
+    /* ==========================================================
+       Screenshots Showcase Section
+       ========================================================== */
+    #screenshots {
+      padding: 48px 0 64px;
+    }
+
+    .showcase-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .showcase-tabs {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      white-space: nowrap;
-      box-sizing: border-box;
+      flex-wrap: wrap;
     }
 
-    /* Features 3-Cols */
+    .m3-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      border: 1px solid var(--md-sys-color-outline-variant);
+      background: var(--md-sys-color-surface-container-low);
+      color: var(--md-sys-color-on-surface-variant);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .m3-chip:hover {
+      background: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-on-surface);
+    }
+
+    .m3-chip.active {
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      border-color: var(--md-sys-color-primary-container);
+    }
+
+    .showcase-viewport {
+      width: 100%;
+      border-radius: 28px;
+      overflow: hidden;
+      background: var(--md-sys-color-surface-container-low);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      box-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.15);
+      padding: 16px;
+    }
+
+    .showcase-frame {
+      width: 100%;
+      aspect-ratio: 2736 / 1728;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #090F0F;
+      position: relative;
+      cursor: zoom-in;
+      display: block;
+    }
+
+    .showcase-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      transition: opacity 0.25s ease;
+    }
+
+    .showcase-zoom-overlay {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      background: rgba(0, 0, 0, 0.75);
+      color: #FFFFFF;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: background 0.2s;
+    }
+
+    .showcase-zoom-overlay:hover {
+      background: rgba(0, 0, 0, 0.9);
+    }
+
+    .showcase-caption {
+      padding: 16px 8px 8px;
+      text-align: center;
+    }
+
+    .showcase-caption h3 {
+      font-family: var(--font-brand);
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--md-sys-color-on-surface);
+      margin-bottom: 4px;
+    }
+
+    .showcase-caption p {
+      font-size: 0.8125rem;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    /* ==========================================================
+       Features Section
+       ========================================================== */
+    #features {
+      padding: 48px 0 72px;
+    }
+
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 24px;
-      margin-bottom: 72px;
-      width: 100%;
     }
 
-    .feature-box {
-      background: var(--surface);
-      border: 1px solid var(--surface-border);
+    .feature-card {
+      background: var(--md-sys-color-surface-container-low);
+      border: 1px solid var(--md-sys-color-outline-variant);
       border-radius: 24px;
       padding: 28px;
-      box-shadow: var(--card-shadow);
-      transition: transform 0.2s;
-      box-sizing: border-box;
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
 
-    .feature-box:hover {
+    .feature-card:hover {
+      border-color: var(--md-sys-color-primary);
       transform: translateY(-2px);
     }
 
-    .feature-icon-wrapper {
-      width: 46px;
-      height: 46px;
-      border-radius: 16px;
-      background: var(--primary-container);
-      color: var(--primary);
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-primary);
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 18px;
     }
 
-    .feature-box h3 {
+    .feature-card h3 {
+      font-family: var(--font-brand);
       font-size: 1.05rem;
       font-weight: 700;
+      color: var(--md-sys-color-on-surface);
       margin-bottom: 8px;
     }
 
-    .feature-box p {
-      font-size: 0.825rem;
-      color: var(--text-muted);
-      line-height: 1.65;
+    .feature-card p {
+      font-size: 0.8125rem;
+      color: var(--md-sys-color-on-surface-variant);
+      line-height: 1.6;
     }
 
-    /* Screenshots Showcase */
-    #screenshots, .screenshots-section {
-      width: 100%;
-      max-width: 1200px;
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: 24px;
-      padding-right: 24px;
-      margin-top: 56px;
-      margin-bottom: 72px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-
-    .screenshots-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 32px;
-      width: 100%;
-      align-items: stretch;
-      box-sizing: border-box;
-    }
-
-    .screenshot-card {
-      background: var(--surface);
-      border: 1px solid var(--surface-border);
-      border-radius: 28px;
-      padding: 14px;
-      box-shadow: var(--card-shadow);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 100%;
-      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-      box-sizing: border-box;
-    }
-
-    .screenshot-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.4);
-      border-color: rgba(57, 197, 187, 0.4);
-    }
-
-    .screenshot-frame {
-      width: 100%;
-      aspect-ratio: 2736 / 1728;
-      border-radius: 20px;
-      overflow: hidden;
-      border: 1px solid var(--surface-border);
-      background: #131317;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      cursor: zoom-in;
-    }
-
-    .screenshot-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      transition: transform 0.3s ease;
-    }
-
-    .screenshot-frame:hover img {
-      transform: scale(1.02);
-    }
-
-    .screenshot-caption {
-      text-align: center;
-      padding: 6px 12px 10px;
-      min-height: 52px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .screenshot-caption h4 {
-      font-size: 0.975rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-      color: var(--text-main);
-    }
-
-    .screenshot-caption p {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    /* Footer */
+    /* ==========================================================
+       Footer
+       ========================================================== */
     footer {
-      border-top: 1px solid var(--surface-border);
+      border-top: 1px solid var(--md-sys-color-outline-variant);
       padding: 40px 0;
       text-align: center;
-      font-size: 0.825rem;
-      color: var(--text-sub);
-      width: 100%;
+      font-size: 0.8125rem;
+      color: var(--md-sys-color-on-surface-variant);
     }
 
     footer a {
-      color: var(--text-muted);
-      transition: color 0.2s;
+      color: var(--md-sys-color-primary);
+      transition: opacity 0.2s;
     }
 
     footer a:hover {
-      color: var(--primary);
+      opacity: 0.8;
     }
 
-    /* Responsive Breakdown */
+    /* ==========================================================
+       Responsive Breakdown
+       ========================================================== */
     @media (max-width: 900px) {
       .hero h1 {
-        font-size: 2.3rem;
+        font-size: 2.25rem;
       }
-      .card-grid {
+      .download-cards-grid {
         grid-template-columns: 1fr;
-        gap: 24px;
       }
-      .screenshots-grid {
+      .features-grid {
         grid-template-columns: 1fr;
-        gap: 24px;
-      }
-      .screenshot-card[style*="grid-column: 1 / -1"] {
-        grid-column: auto !important;
       }
     }
 
@@ -927,78 +752,41 @@
       body {
         padding-top: 64px;
       }
-      .header-inner {
+      header {
         height: 64px;
-        padding: 0 16px;
       }
-      .brand-tag {
-        display: none;
+      .header-inner {
+        padding: 0 16px;
       }
       .nav-links .hide-mobile {
         display: none;
       }
-      #screenshots, .screenshots-section {
-        padding-left: 16px;
-        padding-right: 16px;
-        margin-top: 40px;
-        margin-bottom: 56px;
-      }
-      .screenshot-card {
-        padding: 10px;
-        border-radius: 20px;
-      }
-      .screenshot-frame {
-        border-radius: 14px;
-      }
       .hero {
-        padding: 40px 0 28px;
+        padding: 40px 0 32px;
       }
       .hero h1 {
         font-size: 1.85rem;
-        margin-bottom: 14px;
       }
       .hero p {
-        font-size: 0.925rem;
-        margin-bottom: 24px;
+        font-size: 0.95rem;
       }
-      .hero-actions {
-        flex-direction: column;
-        width: 100%;
+      .btn-row {
+        grid-template-columns: 1fr;
       }
-      .hero-actions .btn {
-        width: 100%;
-      }
-      .container {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-      .card {
-        padding: 24px 18px;
+      .m3-card {
+        padding: 24px 20px;
         border-radius: 24px;
       }
-      .card-body {
-        padding: 16px 14px;
-        font-size: 0.8rem;
-      }
-      .download-grid-2x2 {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-      .download-grid-2x2 a[style*="grid-column: span 2"] {
-        grid-column: span 1 !important;
-      }
-      .btn-m3 {
-        height: 44px;
-        font-size: 0.8rem;
-      }
-      .features-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-        margin-bottom: 56px;
-      }
-      .feature-box {
-        padding: 20px 18px;
+      .showcase-viewport {
+        padding: 10px;
         border-radius: 20px;
+      }
+      .showcase-frame {
+        border-radius: 14px;
+      }
+      .m3-chip {
+        padding: 6px 14px;
+        font-size: 0.775rem;
       }
     }
   </style>
@@ -1006,64 +794,31 @@
 
 <body>
 
-  <!-- Header: Fixed Top Full-Width Navbar -->
+  <!-- Header Navbar -->
   <header>
     <div class="header-inner">
-      <!-- Logo & Brand -->
       <a href="#" class="brand">
         <div class="brand-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <circle cx="12" cy="12" r="3"></circle>
-          </svg>
+          <img src="icon.png" alt="0rhxPlayer" />
         </div>
-        <div>
-          <div class="brand-title">0rhxPlayer</div>
-          <span class="brand-tag">DESKTOP & VSCODE</span>
-        </div>
+        <span class="brand-title">0rhxPlayer</span>
       </a>
 
-        <!-- Navigation & Controls -->
-        <div class="nav-links">
-          <a href="#downloads" class="nav-link hide-mobile" id="navDownloads">Downloads</a>
-          <a href="#screenshots" class="nav-link hide-mobile" id="navScreenshots">Screenshots</a>
-          <a href="#features" class="nav-link hide-mobile" id="navFeatures">Features</a>
+      <div class="nav-links">
+        <a href="#downloads" class="nav-link hide-mobile" id="navDownloads">Downloads</a>
+        <a href="#screenshots" class="nav-link hide-mobile" id="navScreenshots">Screenshots</a>
+        <a href="#features" class="nav-link hide-mobile" id="navFeatures">Features</a>
 
-          <!-- Controls: Lang Selector & Theme Toggle -->
-          <div class="controls-group">
+        <div class="controls-group">
           <select id="langSelect" class="select-btn" autocomplete="off" aria-label="Select Language">
             <option value="zh">🇨🇳 中文</option>
             <option value="en" selected>🇺🇸 EN</option>
             <option value="ja">🇯🇵 日本語</option>
           </select>
-          <script>
-            (function() {
-              try {
-                var l = window.__INITIAL_LANG__ || 'en';
-                var s = document.getElementById('langSelect');
-                if (s) {
-                  s.value = l;
-                  for (var i = 0; i < s.options.length; i++) {
-                    var match = (s.options[i].value === l);
-                    s.options[i].selected = match;
-                    if (match) s.selectedIndex = i;
-                  }
-                }
-              } catch(e) {}
-            })();
-          </script>
 
-          <button id="themeToggle" class="theme-btn" title="切换深浅主题" aria-label="Toggle Theme">
+          <button id="themeToggle" class="icon-btn" aria-label="Toggle Theme" title="Toggle Theme">
             <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="5"></circle>
-              <line x1="12" y1="1" x2="12" y2="3"></line>
-              <line x1="12" y1="21" x2="12" y2="23"></line>
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-              <line x1="1" y1="12" x2="3" y2="12"></line>
-              <line x1="21" y1="12" x2="23" y2="12"></line>
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
           </button>
         </div>
@@ -1071,74 +826,51 @@
     </div>
   </header>
 
-  <!-- Hero -->
   <main>
-    <section class="hero">
-      <div class="container hero-content">
-        <div class="status-banner">
-          <span class="status-dot"></span>
-          <span id="heroStatusText">Desktop: Native Qt 6 v1.1.0 Released</span>
-        </div>
-
-        <div class="badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
-          </svg>
-          <span id="heroBadge">Material 3 Design • Lightweight Local Music Player</span>
-        </div>
-
-        <h1>
-          <span id="heroHeadline1">Clean & Pleasant</span><br />
-          <span class="highlight-text" id="heroHeadline2">Local Music Experience</span>
-        </h1>
-
-        <p id="heroDesc">
-          0rhxPlayer Desktop is built natively with Qt 6 (C++ / Qt Quick) featuring WASAPI exclusive output and minimal system overhead. v1.1.0 is now available.
-        </p>
-
-
+    <!-- Hero Section -->
+    <section class="container hero">
+      <div class="hero-badge">
+        <span class="hero-dot"></span>
+        <span id="heroBadge">Qt 6 Native v1.1.0 Released</span>
       </div>
+      <h1 id="heroHeadline">Clean & Pleasant<br />Local Music Experience</h1>
+      <p id="heroDesc">Built natively with Qt 6 (C++ / Qt Quick) and WASAPI exclusive output for lightweight performance and pure local audio playback.</p>
     </section>
 
-    <!-- Downloads Matrix - Equal Height & 2x2 Grid -->
-    <section id="downloads" class="container" style="padding-top: 24px;">
+    <!-- Downloads Section -->
+    <section id="downloads" class="container">
       <div class="section-title">
-        <h2 id="dlSectionTitle">Downloads & Releases</h2>
-        <p id="dlSectionSub">Get the apps and extension for your platform</p>
+        <h2 id="dlSectionTitle">Get 0rhxPlayer</h2>
+        <p id="dlSectionSub">Choose the app or extension for your platform</p>
       </div>
 
-      <!-- Mirror Selector Switch -->
-      <div class="mirror-selector-wrapper">
-        <div class="mirror-selector">
-          <div class="mirror-label">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Mirror Selector -->
+      <div class="mirror-switch-container">
+        <div class="m3-segmented-group">
+          <button type="button" class="m3-segmented-btn active" id="mirrorOfficialBtn" onclick="setMirror('official')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+            </svg>
+            <span id="mirrorOfficialLabel">GitHub Official</span>
+          </button>
+          <button type="button" class="m3-segmented-btn" id="mirrorProxyBtn" onclick="setMirror('proxy')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
             </svg>
-            <span id="mirrorSelectorTitle">Download Source</span>
-          </div>
-          <div class="mirror-options">
-            <button type="button" class="mirror-btn active" id="mirrorOfficialBtn" onclick="setMirror('official')">
-              <span class="mirror-dot"></span>
-              <span id="mirrorOfficialLabel">GitHub Official</span>
-            </button>
-            <button type="button" class="mirror-btn" id="mirrorProxyBtn" onclick="setMirror('proxy')">
-              <span class="mirror-dot"></span>
-              <span id="mirrorProxyLabel">git.rincynar.top Mirror</span>
-            </button>
-          </div>
+            <span id="mirrorProxyLabel">git.rincynar.top Mirror</span>
+          </button>
         </div>
-        <div class="mirror-hint" id="mirrorHint">
-          Using GitHub direct downloads. Switch to mirror if downloads are slow.
-        </div>
+        <div class="mirror-hint-text" id="mirrorHint">Using GitHub direct download. Switch to mirror if downloads are slow.</div>
       </div>
 
-      <div class="card-grid">
+      <!-- Download Cards -->
+      <div class="download-cards-grid">
         <!-- 1. Desktop Card -->
-        <div class="card">
-          <div class="card-top">
-            <div class="card-header">
+        <div class="m3-card">
+          <div>
+            <div class="card-head">
               <div class="card-brand">
-                <div class="card-icon">
+                <div class="card-icon-box">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect width="20" height="14" x="2" y="3" rx="2"></rect>
                     <line x1="8" x2="16" y1="21" y2="21"></line>
@@ -1150,59 +882,45 @@
                   <p id="desktopCardSub">Native Qt 6 Client for Windows & Linux</p>
                 </div>
               </div>
-              <div style="display: flex; gap: 8px; align-items: center; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end;">
-                <span id="desktopStatusBadge" class="tag-badge-status">
-                  <span class="status-dot" style="width: 5px; height: 5px;"></span>
-                  <span id="desktopStatusText">Latest</span>
-                </span>
-                <span id="desktopTag" class="tag-badge">v1.1.0</span>
-              </div>
+              <span id="desktopTag" class="tag-badge">v1.1.0</span>
             </div>
-
-            <div class="card-body">
-              <ul id="desktopFeatureList">
-                <li>Native Qt 6 (C++ / Qt Quick) client with fluid responsive UI</li>
-                <li>WASAPI Exclusive output with low latency audio pipeline</li>
-                <li>Supports FLAC / WAV / APE / MP3 / AAC / OGG / Opus formats</li>
-                <li>10-Band Equalizer with tuned acoustic presets</li>
-                <li>Bilingual synchronized lyrics with smooth center tracking</li>
-              </ul>
-            </div>
+            <p class="card-desc" id="desktopCardDesc">Native Qt 6 client with low latency WASAPI exclusive audio engine and 10-band equalizer.</p>
           </div>
 
-          <!-- Download Action Buttons -->
-          <div class="card-bottom">
-            <div class="download-grid-2x2">
-              <a id="winExeBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.0/0rhxPlayer-v1.1.0-windows-x64-setup.exe" target="_blank" class="btn btn-primary btn-m3">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <div class="card-actions">
+            <div class="btn-row">
+              <a id="winExeBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.0/0rhxPlayer-v1.1.0-windows-x64-setup.exe" target="_blank" class="btn-m3 btn-m3-filled">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                   <polyline points="7 10 12 15 17 10"></polyline>
                   <line x1="12" y1="15" x2="12" y2="3"></line>
                 </svg>
-                <span id="btnWinExe">Windows Installer (.exe)</span>
+                <span id="btnWinExe">Installer (.exe)</span>
               </a>
-              <a id="winZipBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.0/0rhxPlayer-v1.1.0-windows-x64-portable.zip" target="_blank" class="btn btn-tonal btn-m3">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <a id="winZipBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.0/0rhxPlayer-v1.1.0-windows-x64-portable.zip" target="_blank" class="btn-m3 btn-m3-tonal">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                 </svg>
-                <span id="btnWinZip">Windows Portable (.zip)</span>
-              </a>
-              <a id="desktopRepoBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases" target="_blank" class="btn btn-tonal btn-m3" style="grid-column: span 2;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-                </svg>
-                <span id="btnDesktopRepo">View Releases on GitHub</span>
+                <span id="btnWinZip">Portable (.zip)</span>
               </a>
             </div>
+            <a id="desktopRepoBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases" target="_blank" class="btn-m3 btn-m3-text">
+              <span id="btnDesktopRepo">View Releases on GitHub</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </a>
           </div>
         </div>
 
         <!-- 2. VSCode Extension Card -->
-        <div class="card">
-          <div class="card-top">
-            <div class="card-header">
+        <div class="m3-card">
+          <div>
+            <div class="card-head">
               <div class="card-brand">
-                <div class="card-icon" style="background: rgba(2, 132, 199, 0.15); color: var(--accent-blue);">
+                <div class="card-icon-box">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="16 18 22 12 16 6"></polyline>
                     <polyline points="8 6 2 12 8 18"></polyline>
@@ -1213,162 +931,135 @@
                   <p id="vscodeCardSub">Lightweight In-Editor Extension</p>
                 </div>
               </div>
+              <span class="tag-badge">Extension</span>
             </div>
-
-            <div class="card-body">
-              <ul id="vscodeFeatureList">
-                <li>Status bar playback controller for focused coding</li>
-                <li>Sidebar library browser and playlist queue</li>
-                <li>Ultra-low memory footprint and instant startup</li>
-                <li>Full shortcut controls and synchronized lyric view</li>
-              </ul>
-            </div>
+            <p class="card-desc" id="vscodeCardDesc">Status bar playback controller with sidebar library and playlists for focused coding.</p>
           </div>
 
-          <!-- Extension Buttons 2x2 Grid Equivalent -->
-          <div class="card-bottom">
-            <div class="download-grid-2x2">
-              <a href="https://marketplace.visualstudio.com/items?itemName=RinCynar.0rhxplayer" target="_blank" class="btn btn-primary btn-m3" style="background: var(--accent-blue); color: #fff; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <div class="card-actions">
+            <div class="btn-row">
+              <a id="vscodeMarketplaceBtn" href="https://marketplace.visualstudio.com/items?itemName=RinCynar.0rhxplayer" target="_blank" class="btn-m3 btn-m3-filled">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="9" cy="21" r="1"></circle>
                   <circle cx="20" cy="21" r="1"></circle>
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                 </svg>
-                <span id="btnVscodeMarketplace">Install from Marketplace</span>
+                <span id="btnVscodeMarketplace">Marketplace</span>
               </a>
-              <a id="vscodeVsixBtn" href="https://github.com/RinCynar/0rhxPlayer-VSC/releases/latest" target="_blank" class="btn btn-tonal btn-m3">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <a id="vscodeVsixBtn" href="https://github.com/RinCynar/0rhxPlayer-VSC/releases/latest" target="_blank" class="btn-m3 btn-m3-tonal">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
                   <polyline points="14 2 14 8 20 8"></polyline>
                 </svg>
-                <span id="btnVscodeVsix">Download VSIX Package</span>
-              </a>
-              <a href="https://github.com/RinCynar/0rhxPlayer-VSC" target="_blank" class="btn btn-tonal btn-m3" style="grid-column: span 2;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-                </svg>
-                <span id="btnVscodeRepo">View Extension Repository on GitHub</span>
+                <span id="btnVscodeVsix">VSIX Package</span>
               </a>
             </div>
+            <a id="vscodeRepoBtn" href="https://github.com/RinCynar/0rhxPlayer-VSC" target="_blank" class="btn-m3 btn-m3-text">
+              <span id="btnVscodeRepo">View Extension Repository on GitHub</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Screenshots Showcase -->
-    <section id="screenshots" class="container screenshots-section">
+    <!-- Application Screenshots Showcase -->
+    <section id="screenshots" class="container">
       <div class="section-title">
-        <h2 id="ssSectionTitle">Application Screenshots</h2>
-        <p id="ssSectionSub">Clean UI crafted with Material Design 3</p>
+        <h2 id="ssSectionTitle">Application Showcase</h2>
+        <p id="ssSectionSub">Native Material You interface crafted for desktop and editor</p>
       </div>
 
-      <div class="screenshots-grid">
-        <!-- 1. Desktop Home -->
-        <div class="screenshot-card">
-          <a href="screenshots/desktop-home.png" target="_blank" rel="noopener" class="screenshot-frame">
-            <img src="screenshots/desktop-home.png" alt="Desktop Home & Library" loading="lazy" decoding="async" />
-          </a>
-          <div class="screenshot-caption">
-            <h4 id="ss1Title">Desktop - Home & Library View</h4>
-            <p id="ss1Sub">Adaptive sidebar, personalized greeting, and local music tracks</p>
-          </div>
+      <div class="showcase-container">
+        <!-- Interactive Chips -->
+        <div class="showcase-tabs">
+          <button type="button" class="m3-chip active" onclick="switchShowcase(0)">
+            <span id="tabDesktopHome">Home & Library</span>
+          </button>
+          <button type="button" class="m3-chip" onclick="switchShowcase(1)">
+            <span id="tabDesktopNowPlaying">NowPlaying & Lyrics</span>
+          </button>
+          <button type="button" class="m3-chip" onclick="switchShowcase(2)">
+            <span id="tabDesktopSearch">Search</span>
+          </button>
+          <button type="button" class="m3-chip" onclick="switchShowcase(3)">
+            <span id="tabDesktopEq">10-Band EQ</span>
+          </button>
+          <button type="button" class="m3-chip" onclick="switchShowcase(4)">
+            <span id="tabVscode">VSCode Extension</span>
+          </button>
         </div>
 
-        <!-- 2. Desktop NowPlaying -->
-        <div class="screenshot-card">
-          <a href="screenshots/desktop-nowplaying.png" target="_blank" rel="noopener" class="screenshot-frame">
-            <img src="screenshots/desktop-nowplaying.png" alt="Desktop NowPlaying & Lyrics" loading="lazy" decoding="async" />
+        <!-- High-res Viewport -->
+        <div class="showcase-viewport">
+          <a id="showcaseLink" href="screenshots/desktop-home.png" target="_blank" rel="noopener" class="showcase-frame" title="Click to view full size">
+            <img id="showcaseImg" src="screenshots/desktop-home.png" alt="0rhxPlayer Screenshot" loading="lazy" decoding="async" />
+            <div class="showcase-zoom-overlay">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="11" y1="8" x2="11" y2="14"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+              <span id="zoomHintText">View Full Size</span>
+            </div>
           </a>
-          <div class="screenshot-caption">
-            <h4 id="ss2Title">Desktop - NowPlaying & Lyrics</h4>
-            <p id="ss2Sub">Pure black canvas, high-res cover art, and smooth centered scrolling lyrics</p>
-          </div>
-        </div>
 
-        <!-- 3. Desktop Search -->
-        <div class="screenshot-card">
-          <a href="screenshots/desktop-search.png" target="_blank" rel="noopener" class="screenshot-frame">
-            <img src="screenshots/desktop-search.png" alt="Desktop Search & Filtering" loading="lazy" decoding="async" />
-          </a>
-          <div class="screenshot-caption">
-            <h4 id="ss3Title">Desktop - Search & Filtering</h4>
-            <p id="ss3Sub">Instant local music library filtering by title, artist, or album</p>
-          </div>
-        </div>
-
-        <!-- 4. Desktop EQ -->
-        <div class="screenshot-card">
-          <a href="screenshots/desktop-eq.png" target="_blank" rel="noopener" class="screenshot-frame">
-            <img src="screenshots/desktop-eq.png" alt="Desktop 10-Band Equalizer" loading="lazy" decoding="async" />
-          </a>
-          <div class="screenshot-caption">
-            <h4 id="ss4Title">Desktop - 10-Band Equalizer</h4>
-            <p id="ss4Sub">Fine-grained frequency control and presets over WASAPI exclusive output</p>
-          </div>
-        </div>
-
-        <!-- 5. VSCode Extension -->
-        <div class="screenshot-card" style="grid-column: 1 / -1;">
-          <a href="screenshots/vscode.png" target="_blank" rel="noopener" class="screenshot-frame">
-            <img src="screenshots/vscode.png" alt="VSCode Extension Preview" loading="lazy" decoding="async" />
-          </a>
-          <div class="screenshot-caption">
-            <h4 id="ss5Title">VSCode Extension - In-Editor Player</h4>
-            <p id="ss5Sub">Status bar controls and sidebar explorer for distraction-free coding</p>
+          <div class="showcase-caption">
+            <h3 id="showcaseTitle">Desktop - Home & Library View</h3>
+            <p id="showcaseSub">Adaptive sidebar, personalized greeting, and local music collection</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Features -->
+    <!-- Key Features Section -->
     <section id="features" class="container">
       <div class="section-title">
         <h2 id="featSectionTitle">Key Features</h2>
-        <p id="featSectionSub">Practical features focused on local music listening</p>
+        <p id="featSectionSub">Designed purely for lightweight local music listening</p>
       </div>
 
       <div class="features-grid">
-        <!-- Feature 1 -->
-        <div class="feature-box">
-          <div class="feature-icon-wrapper">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="4" x2="20" y1="21" y2="21"></line>
-              <line x1="4" x2="20" y1="3" y2="3"></line>
-              <line x1="4" x2="20" y1="12" y2="12"></line>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
             </svg>
           </div>
-          <h3 id="feat1Title">Local Audio Decoding & EQ</h3>
-          <p id="feat1Sub">
-            Native BASS audio engine with WASAPI Exclusive output, supporting major lossless and lossy formats with a 10-band equalizer.
-          </p>
+          <h3 id="feat1Title">WASAPI Exclusive Audio</h3>
+          <p id="feat1Sub">Low latency native audio engine with bit-perfect WASAPI exclusive output and 10-band equalizer presets.</p>
         </div>
 
-        <!-- Feature 2 -->
-        <div class="feature-box">
-          <div class="feature-icon-wrapper">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="21" x2="3" y1="6" y2="6"></line>
-              <line x1="15" x2="3" y1="12" y2="12"></line>
-              <line x1="17" x2="3" y1="18" y2="18"></line>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18V5l12-2v13"></path>
+              <circle cx="6" cy="18" r="3"></circle>
+              <circle cx="18" cy="16" r="3"></circle>
             </svg>
           </div>
-          <h3 id="feat2Title">Bilingual Synchronized Lyrics</h3>
-          <p id="feat2Sub">
-            Supports embedded and external LRC lyrics with bilingual translations, font size scaling, and smooth alignment.
-          </p>
+          <h3 id="feat2Title">Synchronized Lyrics</h3>
+          <p id="feat2Sub">Embedded and external LRC lyric engine with bilingual synchronized scrolling, center alignment, and smooth tracking.</p>
         </div>
 
-        <!-- Feature 3 -->
-        <div class="feature-box">
-          <div class="feature-icon-wrapper">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="m4.93 4.93 4.24 4.24"></path>
+              <path d="m14.83 9.17 4.24-4.24"></path>
+              <path d="m14.83 14.83 4.24 4.24"></path>
+              <path d="m9.17 14.83-4.24 4.24"></path>
             </svg>
           </div>
-          <h3 id="feat3Title">Material 3 Motion & Speed</h3>
-          <p id="feat3Sub">
-            Built with Qt Quick, following M3 emphasized easing curves and Material You dynamic color for fluid responsiveness.
-          </p>
+          <h3 id="feat3Title">Material You Aesthetics</h3>
+          <p id="feat3Sub">Crafted in Qt Quick following Google Material 3 guidelines with smooth animations and minimal memory footprint.</p>
         </div>
       </div>
     </section>
@@ -1386,7 +1077,7 @@
     </div>
   </footer>
 
-  <!-- Script (I18N + Theme + Data Fetching) -->
+  <!-- Scripts: State Management & I18N -->
   <script>
     // ========================
     // 1. I18N Dictionaries
@@ -1396,45 +1087,36 @@
         pageTitle: "0rhxPlayer - 轻量本地音乐播放器 (Desktop & VSCode)",
         navDownloads: "下载中心",
         navScreenshots: "界面预览",
-        navFeatures: "特性",
-        heroStatusText: "桌面端：Qt 6 原生版 v1.1.0 已发布",
-        heroBadge: "Material 3 规范 • 轻量本地音乐播放器",
-        heroHeadline1: "简洁清爽的",
-        heroHeadline2: "本地音乐播放体验",
-        heroDesc: "0rhxPlayer 桌面端采用 Qt 6（C++ / Qt Quick）与 WASAPI 独占输出原生构建，提供低资源占用的本地音频播放体验。v1.1.0 正式版现已发布。",
-        dlSectionTitle: "客户端与插件获取",
-        dlSectionSub: "选择适合您平台的应用与扩展",
-        mirrorSelectorTitle: "下载源",
+        navFeatures: "功能特性",
+        heroBadge: "Qt 6 原生版 v1.1.0 现已发布",
+        heroHeadline: "简洁清爽的<br />本地音乐播放体验",
+        heroDesc: "基于 Qt 6（C++ / Qt Quick）原生构建，搭载 WASAPI 独占输出与 10 段均衡器，低资源占用，纯净聆听本地音频。",
+        dlSectionTitle: "获取客户端与扩展",
+        dlSectionSub: "选择适合您平台的桌面应用或编辑器插件",
         mirrorOfficialLabel: "GitHub 官方源",
         mirrorProxyLabel: "git.rincynar.top 镜像源",
         mirrorHintOfficial: "当前使用 GitHub 官方源下载，若连接缓慢可切换为镜像源",
         mirrorHintProxy: "当前已启用 git.rincynar.top 镜像源加速下载",
         desktopCardTitle: "0rhxPlayer 桌面端",
         desktopCardSub: "Windows & Linux 原生 Qt 6 客户端",
-        desktopStatusText: "最新版",
-        desktopFeatures: [
-          "基于 Qt 6（C++ / Qt Quick）原生构建，界面流畅响应",
-          "支持 WASAPI 独占输出，纯净低延迟音频管线",
-          "支持 FLAC / WAV / APE / MP3 / AAC / OGG / Opus 等常见格式",
-          "10 段均衡器调节与声学预设",
-          "中/日双语动态歌词同步显示与平滑居中滚动"
-        ],
-        btnWinExe: "Windows 安装包 (.exe)",
-        btnWinZip: "Windows 便携版 (.zip)",
+        desktopCardDesc: "原生 Qt 6 构建，支持 WASAPI 独占低延迟输出、10 段均衡器调节与无损音频解码。",
+        btnWinExe: "安装包 (.exe)",
+        btnWinZip: "便携版 (.zip)",
         btnDesktopRepo: "查看全部版本与源码",
         vscodeCardTitle: "0rhxPlayer for VSCode",
-        vscodeCardSub: "VSCode 沉浸式轻量插件",
-        vscodeFeatures: [
-          "状态栏极简常驻控制器，敲代码不分心",
-          "侧边栏挂载本地曲库与播放队列",
-          "低内存占用，开箱即用体验",
-          "支持快捷键全局控制与歌词展示"
-        ],
-        btnVscodeMarketplace: "VSCode 市场安装",
-        btnVscodeVsix: "下载 VSIX 离线包",
-        btnVscodeRepo: "查看 VSCode 插件源码仓库",
-        ssSectionTitle: "应用界面预览",
+        vscodeCardSub: "VSCode 编辑器轻量扩展",
+        vscodeCardDesc: "状态栏常驻控制器、侧边栏本地曲库与播放队列，沉浸编码无需切屏。",
+        btnVscodeMarketplace: "市场安装",
+        btnVscodeVsix: "VSIX 离线包",
+        btnVscodeRepo: "查看插件源码仓库",
+        ssSectionTitle: "应用实机预览",
         ssSectionSub: "遵循 Material Design 3 规范的原生界面设计",
+        tabDesktopHome: "主页曲库",
+        tabDesktopNowPlaying: "播放与歌词",
+        tabDesktopSearch: "歌曲检索",
+        tabDesktopEq: "10段均衡器",
+        tabVscode: "VSCode 插件",
+        zoomHintText: "点击查看原图",
         ss1Title: "桌面端 - 主页与曲库视图",
         ss1Sub: "自适应侧边栏、问候语与本地曲目展示",
         ss2Title: "桌面端 - 播放详情与双语歌词",
@@ -1445,61 +1127,51 @@
         ss4Sub: "多频段参数调节与预设切换，直通 WASAPI 独占音频管线",
         ss5Title: "VSCode 插件版 - 编辑器内播放体验",
         ss5Sub: "状态栏控制器、侧边栏本地曲库、沉浸编码不分心",
-        featSectionTitle: "主要功能特性",
+        featSectionTitle: "核心功能特性",
         featSectionSub: "专注于本地音频收听的实用功能",
-        feat1Title: "本地音频解码与 EQ",
-        feat1Sub: "原生音频引擎直通 WASAPI 独占输出，支持主流无损/有损格式与 10 段均衡器。",
-        feat2Title: "双语歌词同步呈现",
-        feat2Sub: "支持内嵌与外部 LRC 歌词，提供中/日双语翻译歌词同步显示，支持居中平滑高亮与字号调整。",
-        feat3Title: "Material 3 动效与性能",
-        feat3Sub: "以 Qt Quick 构建，遵循 M3 强调缓动曲线与 Material You 动态取色，界面流畅响应。"
+        feat1Title: "WASAPI 独占音频",
+        feat1Sub: "直通音频硬件输出，提供纯净低延迟音频流，支持 10 段均衡器与主流音频格式。",
+        feat2Title: "双语同步动态歌词",
+        feat2Sub: "支持内嵌与外部 LRC 歌词，提供中/日双语翻译同步显示，支持平滑居中高亮。",
+        feat3Title: "Material You 原生设计",
+        feat3Sub: "采用 Qt Quick 构建，遵循 Material 3 设计系统，界面流畅响应，内存开销极低。"
       },
       en: {
         pageTitle: "0rhxPlayer - Lightweight Local Music Player (Desktop & VSCode)",
         navDownloads: "Downloads",
         navScreenshots: "Screenshots",
         navFeatures: "Features",
-        heroStatusText: "Desktop: Native Qt 6 v1.1.0 Released",
-        heroBadge: "Material 3 Design • Lightweight Local Music Player",
-        heroHeadline1: "Clean & Pleasant",
-        heroHeadline2: "Local Music Experience",
-        heroDesc: "0rhxPlayer Desktop is built natively with Qt 6 (C++ / Qt Quick) featuring WASAPI exclusive output and minimal system overhead. v1.1.0 is now available.",
-
-        dlSectionTitle: "Downloads & Releases",
-        dlSectionSub: "Get the apps and extension for your platform",
-        mirrorSelectorTitle: "Download Source",
+        heroBadge: "Qt 6 Native v1.1.0 Released",
+        heroHeadline: "Clean & Pleasant<br />Local Music Experience",
+        heroDesc: "Built natively with Qt 6 (C++ / Qt Quick) and WASAPI exclusive output for lightweight performance and pure local audio playback.",
+        dlSectionTitle: "Get 0rhxPlayer",
+        dlSectionSub: "Choose the app or extension for your platform",
         mirrorOfficialLabel: "GitHub Official",
         mirrorProxyLabel: "git.rincynar.top Mirror",
         mirrorHintOfficial: "Using GitHub direct downloads. Switch to mirror if downloads are slow",
         mirrorHintProxy: "Downloads accelerated via git.rincynar.top mirror",
         desktopCardTitle: "0rhxPlayer Desktop",
         desktopCardSub: "Native Qt 6 Client for Windows & Linux",
-        desktopStatusText: "Latest",
-        desktopFeatures: [
-          "Native Qt 6 (C++ / Qt Quick) client with fluid responsive UI",
-          "WASAPI Exclusive output with low latency audio pipeline",
-          "Supports FLAC / WAV / APE / MP3 / AAC / OGG / Opus formats",
-          "10-Band Equalizer with tuned acoustic presets",
-          "Bilingual synchronized lyrics with smooth center tracking"
-        ],
-        btnWinExe: "Windows Installer (.exe)",
-        btnWinZip: "Windows Portable (.zip)",
+        desktopCardDesc: "Native Qt 6 client with low latency WASAPI exclusive audio engine and 10-band equalizer.",
+        btnWinExe: "Installer (.exe)",
+        btnWinZip: "Portable (.zip)",
         btnDesktopRepo: "View Releases on GitHub",
         vscodeCardTitle: "0rhxPlayer for VSCode",
         vscodeCardSub: "Lightweight In-Editor Extension",
-        vscodeFeatures: [
-          "Status bar playback controller for focused coding",
-          "Sidebar library browser and playlist queue",
-          "Ultra-low memory footprint and instant startup",
-          "Full shortcut controls and synchronized lyric view"
-        ],
-        btnVscodeMarketplace: "Install from Marketplace",
-        btnVscodeVsix: "Download VSIX Package",
+        vscodeCardDesc: "Status bar playback controller with sidebar library and playlists for focused coding.",
+        btnVscodeMarketplace: "Marketplace",
+        btnVscodeVsix: "VSIX Package",
         btnVscodeRepo: "View Extension Repository on GitHub",
-        ssSectionTitle: "Application Screenshots",
-        ssSectionSub: "Clean UI crafted with Material Design 3",
+        ssSectionTitle: "Application Showcase",
+        ssSectionSub: "Native Material You interface crafted for desktop and editor",
+        tabDesktopHome: "Home & Library",
+        tabDesktopNowPlaying: "NowPlaying & Lyrics",
+        tabDesktopSearch: "Search",
+        tabDesktopEq: "10-Band EQ",
+        tabVscode: "VSCode Extension",
+        zoomHintText: "Click to view full size",
         ss1Title: "Desktop - Home & Library View",
-        ss1Sub: "Adaptive sidebar, personalized greeting, and local music tracks",
+        ss1Sub: "Adaptive sidebar, personalized greeting, and local music collection",
         ss2Title: "Desktop - NowPlaying & Lyrics",
         ss2Sub: "Pure black canvas, high-res cover art, and smooth centered scrolling lyrics",
         ss3Title: "Desktop - Search & Filtering",
@@ -1509,57 +1181,48 @@
         ss5Title: "VSCode Extension - In-Editor Player",
         ss5Sub: "Status bar controls and sidebar explorer for distraction-free coding",
         featSectionTitle: "Key Features",
-        featSectionSub: "Practical features focused on local music listening",
-        feat1Title: "Local Audio Decoding & EQ",
-        feat1Sub: "Native audio engine with WASAPI Exclusive output, supporting major lossless and lossy formats with a 10-band equalizer.",
-        feat2Title: "Bilingual Synchronized Lyrics",
-        feat2Sub: "Supports embedded and external LRC lyrics with bilingual translations, font size scaling, and smooth alignment.",
-        feat3Title: "Material 3 Motion & Speed",
-        feat3Sub: "Built with Qt Quick, following M3 emphasized easing curves and Material You dynamic color for fluid responsiveness."
+        featSectionSub: "Designed purely for lightweight local music listening",
+        feat1Title: "WASAPI Exclusive Audio",
+        feat1Sub: "Low latency native audio engine with bit-perfect WASAPI exclusive output and 10-band equalizer presets.",
+        feat2Title: "Synchronized Lyrics",
+        feat2Sub: "Embedded and external LRC lyric engine with bilingual synchronized scrolling, center alignment, and smooth tracking.",
+        feat3Title: "Material You Aesthetics",
+        feat3Sub: "Crafted in Qt Quick following Google Material 3 guidelines with smooth animations and minimal memory footprint."
       },
       ja: {
         pageTitle: "0rhxPlayer - 軽量ローカル音楽プレーヤー (Desktop & VSCode)",
         navDownloads: "ダウンロード",
         navScreenshots: "スクリーンショット",
         navFeatures: "機能紹介",
-        heroStatusText: "デスクトップ版：Qt 6 ネイティブ版 v1.1.0 リリース",
-        heroBadge: "Material 3 設計 • 軽量ローカル音楽プレーヤー",
-        heroHeadline1: "シンプルで心地よい",
-        heroHeadline2: "ローカル音楽再生体験",
-        heroDesc: "0rhxPlayer デスクトップ版は Qt 6（C++ / Qt Quick）と WASAPI 排他出力によりネイティブ構築され、軽快なシステム動作とクリアな音質を提供します。v1.1.0 が利用可能です。",
+        heroBadge: "Qt 6 ネイティブ版 v1.1.0 リリース",
+        heroHeadline: "シンプルで心地よい<br />ローカル音楽再生体験",
+        heroDesc: "Qt 6（C++ / Qt Quick）と WASAPI 排他出力によりネイティブ構築され、軽快な動作とクリアな音質を提供します。",
         dlSectionTitle: "ダウンロード＆リリース",
         dlSectionSub: "お使いのプラットフォームに合ったアプリと拡張機能",
-        mirrorSelectorTitle: "ダウンロード元",
         mirrorOfficialLabel: "GitHub 公式",
         mirrorProxyLabel: "git.rincynar.top ミラー",
         mirrorHintOfficial: "GitHub 公式から直接ダウンロードします。低速な場合はミラーに切り替えてください",
         mirrorHintProxy: "git.rincynar.top ミラーによるダウンロードが有効です",
         desktopCardTitle: "0rhxPlayer デスクトップ版",
         desktopCardSub: "Windows & Linux ネイティブ Qt 6 クライアント",
-        desktopStatusText: "最新版",
-        desktopFeatures: [
-          "ネイティブ Qt 6（C++ / Qt Quick）による軽快なクライアント",
-          "WASAPI 排他出力による低遅延オーディオパイプライン",
-          "FLAC / WAV / APE / MP3 / AAC / OGG / Opus 等の再生に対応",
-          "10バンドイコライザー調整＆各種音響プリセット",
-          "日中バイリンガル同期歌詞のスムーズスクロール表示"
-        ],
-        btnWinExe: "Windows インストーラー (.exe)",
-        btnWinZip: "Windows ポータブル版 (.zip)",
+        desktopCardDesc: "Qt 6 ネイティブ構築、WASAPI 排他出力、10バンドイコライザー、各種音響プリセットに対応。",
+        btnWinExe: "インストーラー (.exe)",
+        btnWinZip: "ポータブル版 (.zip)",
         btnDesktopRepo: "GitHub で全リリースを見る",
         vscodeCardTitle: "0rhxPlayer for VSCode",
         vscodeCardSub: "エディタ統合型軽量拡張機能",
-        vscodeFeatures: [
-          "ステータスバー常駐コントローラーでコーディングに集中",
-          "サイドバーでのローカルライブラリ・キュー管理",
-          "超軽量メモリ消費で高速起動",
-          "ショートカットキー操作および歌詞表示に対応"
-        ],
-        btnVscodeMarketplace: "マーケットプレイスからインストール",
-        btnVscodeVsix: "VSIX パッケージをダウンロード",
+        vscodeCardDesc: "ステータスバー常駐コントローラーとサイドバー曲庫、コーディングを邪魔しない軽量設計。",
+        btnVscodeMarketplace: "マーケットプレイス",
+        btnVscodeVsix: "VSIX パッケージ",
         btnVscodeRepo: "拡張機能の GitHub リポジトリを見る",
         ssSectionTitle: "アプリケーション画面",
         ssSectionSub: "Material Design 3 に準拠したインターフェース",
+        tabDesktopHome: "ホーム＆ライブラリ",
+        tabDesktopNowPlaying: "再生画面＆歌詞",
+        tabDesktopSearch: "楽曲検索",
+        tabDesktopEq: "10バンドEQ",
+        tabVscode: "VSCode 拡張機能",
+        zoomHintText: "クリックして原寸表示",
         ss1Title: "デスクトップ版 - ホーム＆ライブラリ画面",
         ss1Sub: "適応型サイドバー、挨拶表示、ローカル楽曲リスト",
         ss2Title: "デスクトップ版 - 再生画面＆バイリンガル歌詞",
@@ -1572,12 +1235,12 @@
         ss5Sub: "ステータスバー常駐コントローラーとサイドバー曲庫、コーディングを邪魔しない軽量設計",
         featSectionTitle: "主な機能",
         featSectionSub: "ローカル音楽鑑賞に特化した実用機能",
-        feat1Title: "ローカルデコード＆EQ",
-        feat1Sub: "ネイティブオーディオエンジンが WASAPI 排他出力に直接対応。主要なロスレス/ロッシー形式と10バンドEQをサポート。",
+        feat1Title: "WASAPI 排他出力",
+        feat1Sub: "低遅延オーディオエンジン直結、主要な可逆/非可逆形式と10バンドEQをサポート。",
         feat2Title: "バイリンガル同期歌詞",
-        feat2Sub: "内蔵および外部LRC歌詞の解析に対応。日中対訳歌詞の同期表示、中央配置ハイライト、フォントサイズ変更が可能。",
-        feat3Title: "Material 3 モーション＆高速描画",
-        feat3Sub: "Qt Quick で構築し、M3標準イージング曲線と Material You ダイナミックカラーに準拠した滑らかな描画を実現。"
+        feat2Sub: "内蔵および外部LRC歌詞に対応。日中対訳歌詞の同期表示、中央配置ハイライトが可能。",
+        feat3Title: "Material You デザイン",
+        feat3Sub: "Qt Quick で構築し、Material 3 ガイドラインに準拠した滑らかなアニメーションと省メモリを実現。"
       }
     };
 
@@ -1633,23 +1296,42 @@
     }
     window.setMirror = setMirror;
 
-    const mirrorOfficialBtn = document.getElementById('mirrorOfficialBtn');
-    if (mirrorOfficialBtn) {
-      mirrorOfficialBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        setMirror('official');
+    // ========================
+    // 3. Showcase Manager
+    // ========================
+    const showcaseData = [
+      { img: 'screenshots/desktop-home.png', titleKey: 'ss1Title', subKey: 'ss1Sub' },
+      { img: 'screenshots/desktop-nowplaying.png', titleKey: 'ss2Title', subKey: 'ss2Sub' },
+      { img: 'screenshots/desktop-search.png', titleKey: 'ss3Title', subKey: 'ss3Sub' },
+      { img: 'screenshots/desktop-eq.png', titleKey: 'ss4Title', subKey: 'ss4Sub' },
+      { img: 'screenshots/vscode.png', titleKey: 'ss5Title', subKey: 'ss5Sub' }
+    ];
+
+    let activeShowcaseIndex = 0;
+
+    function switchShowcase(index) {
+      activeShowcaseIndex = index;
+      const item = showcaseData[index];
+      const imgEl = document.getElementById('showcaseImg');
+      const linkEl = document.getElementById('showcaseLink');
+      const titleEl = document.getElementById('showcaseTitle');
+      const subEl = document.getElementById('showcaseSub');
+      const d = I18N[currentLang] || I18N.en;
+
+      if (imgEl) imgEl.src = item.img;
+      if (linkEl) linkEl.href = item.img;
+      if (titleEl && d[item.titleKey]) titleEl.textContent = d[item.titleKey];
+      if (subEl && d[item.subKey]) subEl.textContent = d[item.subKey];
+
+      const chips = document.querySelectorAll('.showcase-tabs .m3-chip');
+      chips.forEach((c, idx) => {
+        c.classList.toggle('active', idx === index);
       });
     }
-    const mirrorProxyBtn = document.getElementById('mirrorProxyBtn');
-    if (mirrorProxyBtn) {
-      mirrorProxyBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        setMirror('proxy');
-      });
-    }
+    window.switchShowcase = switchShowcase;
 
     // ========================
-    // 3. Language Detection & State
+    // 4. Language Detection & State
     // ========================
     function detectLanguage() {
       if (window.__INITIAL_LANG__) {
@@ -1674,9 +1356,7 @@
       for (let i = 0; i < sel.options.length; i++) {
         const isMatch = sel.options[i].value === lang;
         sel.options[i].selected = isMatch;
-        if (isMatch) {
-          sel.selectedIndex = i;
-        }
+        if (isMatch) sel.selectedIndex = i;
       }
     }
 
@@ -1691,49 +1371,38 @@
       if (document.getElementById('navDownloads')) document.getElementById('navDownloads').textContent = d.navDownloads;
       if (document.getElementById('navScreenshots')) document.getElementById('navScreenshots').textContent = d.navScreenshots;
       if (document.getElementById('navFeatures')) document.getElementById('navFeatures').textContent = d.navFeatures;
-      if (document.getElementById('heroStatusText')) document.getElementById('heroStatusText').textContent = d.heroStatusText;
+
       if (document.getElementById('heroBadge')) document.getElementById('heroBadge').textContent = d.heroBadge;
-      if (document.getElementById('heroHeadline1')) document.getElementById('heroHeadline1').textContent = d.heroHeadline1;
-      if (document.getElementById('heroHeadline2')) document.getElementById('heroHeadline2').textContent = d.heroHeadline2;
+      if (document.getElementById('heroHeadline')) document.getElementById('heroHeadline').innerHTML = d.heroHeadline;
       if (document.getElementById('heroDesc')) document.getElementById('heroDesc').textContent = d.heroDesc;
+
       if (document.getElementById('dlSectionTitle')) document.getElementById('dlSectionTitle').textContent = d.dlSectionTitle;
       if (document.getElementById('dlSectionSub')) document.getElementById('dlSectionSub').textContent = d.dlSectionSub;
-      if (document.getElementById('mirrorSelectorTitle')) document.getElementById('mirrorSelectorTitle').textContent = d.mirrorSelectorTitle;
       if (document.getElementById('mirrorOfficialLabel')) document.getElementById('mirrorOfficialLabel').textContent = d.mirrorOfficialLabel;
       if (document.getElementById('mirrorProxyLabel')) document.getElementById('mirrorProxyLabel').textContent = d.mirrorProxyLabel;
+
       if (document.getElementById('desktopCardTitle')) document.getElementById('desktopCardTitle').textContent = d.desktopCardTitle;
       if (document.getElementById('desktopCardSub')) document.getElementById('desktopCardSub').textContent = d.desktopCardSub;
-      if (document.getElementById('desktopStatusText')) document.getElementById('desktopStatusText').textContent = d.desktopStatusText;
-
-      const dfEl = document.getElementById('desktopFeatureList');
-      if (dfEl) dfEl.innerHTML = d.desktopFeatures.map(f => `<li>${f}</li>`).join('');
-
+      if (document.getElementById('desktopCardDesc')) document.getElementById('desktopCardDesc').textContent = d.desktopCardDesc;
       if (document.getElementById('btnWinExe')) document.getElementById('btnWinExe').textContent = d.btnWinExe;
       if (document.getElementById('btnWinZip')) document.getElementById('btnWinZip').textContent = d.btnWinZip;
       if (document.getElementById('btnDesktopRepo')) document.getElementById('btnDesktopRepo').textContent = d.btnDesktopRepo;
 
       if (document.getElementById('vscodeCardTitle')) document.getElementById('vscodeCardTitle').textContent = d.vscodeCardTitle;
       if (document.getElementById('vscodeCardSub')) document.getElementById('vscodeCardSub').textContent = d.vscodeCardSub;
-
-      const vfEl = document.getElementById('vscodeFeatureList');
-      if (vfEl) vfEl.innerHTML = d.vscodeFeatures.map(f => `<li>${f}</li>`).join('');
-
+      if (document.getElementById('vscodeCardDesc')) document.getElementById('vscodeCardDesc').textContent = d.vscodeCardDesc;
       if (document.getElementById('btnVscodeMarketplace')) document.getElementById('btnVscodeMarketplace').textContent = d.btnVscodeMarketplace;
       if (document.getElementById('btnVscodeVsix')) document.getElementById('btnVscodeVsix').textContent = d.btnVscodeVsix;
       if (document.getElementById('btnVscodeRepo')) document.getElementById('btnVscodeRepo').textContent = d.btnVscodeRepo;
 
       if (document.getElementById('ssSectionTitle')) document.getElementById('ssSectionTitle').textContent = d.ssSectionTitle;
       if (document.getElementById('ssSectionSub')) document.getElementById('ssSectionSub').textContent = d.ssSectionSub;
-      if (document.getElementById('ss1Title')) document.getElementById('ss1Title').textContent = d.ss1Title;
-      if (document.getElementById('ss1Sub')) document.getElementById('ss1Sub').textContent = d.ss1Sub;
-      if (document.getElementById('ss2Title')) document.getElementById('ss2Title').textContent = d.ss2Title;
-      if (document.getElementById('ss2Sub')) document.getElementById('ss2Sub').textContent = d.ss2Sub;
-      if (document.getElementById('ss3Title')) document.getElementById('ss3Title').textContent = d.ss3Title;
-      if (document.getElementById('ss3Sub')) document.getElementById('ss3Sub').textContent = d.ss3Sub;
-      if (document.getElementById('ss4Title')) document.getElementById('ss4Title').textContent = d.ss4Title;
-      if (document.getElementById('ss4Sub')) document.getElementById('ss4Sub').textContent = d.ss4Sub;
-      if (document.getElementById('ss5Title')) document.getElementById('ss5Title').textContent = d.ss5Title;
-      if (document.getElementById('ss5Sub')) document.getElementById('ss5Sub').textContent = d.ss5Sub;
+      if (document.getElementById('tabDesktopHome')) document.getElementById('tabDesktopHome').textContent = d.tabDesktopHome;
+      if (document.getElementById('tabDesktopNowPlaying')) document.getElementById('tabDesktopNowPlaying').textContent = d.tabDesktopNowPlaying;
+      if (document.getElementById('tabDesktopSearch')) document.getElementById('tabDesktopSearch').textContent = d.tabDesktopSearch;
+      if (document.getElementById('tabDesktopEq')) document.getElementById('tabDesktopEq').textContent = d.tabDesktopEq;
+      if (document.getElementById('tabVscode')) document.getElementById('tabVscode').textContent = d.tabVscode;
+      if (document.getElementById('zoomHintText')) document.getElementById('zoomHintText').textContent = d.zoomHintText;
 
       if (document.getElementById('featSectionTitle')) document.getElementById('featSectionTitle').textContent = d.featSectionTitle;
       if (document.getElementById('featSectionSub')) document.getElementById('featSectionSub').textContent = d.featSectionSub;
@@ -1744,11 +1413,10 @@
       if (document.getElementById('feat3Title')) document.getElementById('feat3Title').textContent = d.feat3Title;
       if (document.getElementById('feat3Sub')) document.getElementById('feat3Sub').textContent = d.feat3Sub;
 
+      switchShowcase(activeShowcaseIndex);
       applyDownloadUrls();
       syncLangSelect(lang);
       document.documentElement.lang = lang === 'zh' ? 'zh-CN' : (lang === 'ja' ? 'ja' : 'en');
-
-      // Reveal body immediately once i18n rendering is done
       document.documentElement.classList.remove('i18n-pending');
     }
 
@@ -1759,10 +1427,8 @@
       });
     }
 
-    // Initial render of language
     renderLanguage(currentLang, false);
 
-    // Safeguards against aggressive browser form control restoration on page load
     window.addEventListener('DOMContentLoaded', () => {
       syncLangSelect(currentLang);
       applyDownloadUrls();
@@ -1771,17 +1437,9 @@
       syncLangSelect(currentLang);
       applyDownloadUrls();
     });
-    setTimeout(() => {
-      syncLangSelect(currentLang);
-      applyDownloadUrls();
-    }, 0);
-    setTimeout(() => {
-      syncLangSelect(currentLang);
-      applyDownloadUrls();
-    }, 50);
 
     // ========================
-    // 4. Theme Toggle
+    // 5. Theme Toggle
     // ========================
     const html = document.documentElement;
     const themeToggle = document.getElementById('themeToggle');
@@ -1811,7 +1469,7 @@
     updateThemeUI();
 
     // ========================
-    // 5. Release Links Fetcher
+    // 6. Release Links Fetcher
     // ========================
     async function loadReleaseData() {
       try {
@@ -1828,7 +1486,7 @@
           }
         }
       } catch (e) {
-        // Fallback URLs already baked into HTML
+        // Fallback baked into HTML
       }
       applyDownloadUrls();
     }
@@ -1838,4 +1496,3 @@
 
 </body>
 </html>
-
