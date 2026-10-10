@@ -224,23 +224,114 @@
       margin-left: 12px;
     }
 
-    .select-btn {
-      appearance: none;
-      -webkit-appearance: none;
+    .m3-menu-anchor {
+      position: relative;
+      display: inline-block;
+    }
+
+    .m3-menu-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 9999px;
       background: var(--md-sys-color-surface-container);
       border: 1px solid var(--md-sys-color-outline-variant);
       color: var(--md-sys-color-on-surface);
-      border-radius: 9999px;
-      padding: 6px 14px;
-      font-size: 0.8rem;
+      font-family: inherit;
+      font-size: 0.8125rem;
       font-weight: 600;
       cursor: pointer;
-      font-family: inherit;
-      transition: all 0.2s ease;
+      transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
     }
 
-    .select-btn:hover {
+    .m3-menu-btn:hover {
       background: var(--md-sys-color-surface-container-high);
+    }
+
+    .m3-menu-btn[aria-expanded="true"] {
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+      border-color: var(--md-sys-color-secondary-container);
+    }
+
+    .m3-menu-btn .chevron-icon {
+      transition: transform 0.2s ease;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .m3-menu-btn[aria-expanded="true"] .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .m3-menu-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 140px;
+      background: var(--md-sys-color-surface-container);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: 16px;
+      padding: 6px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 200;
+      opacity: 0;
+      transform: translateY(-6px) scale(0.96);
+      pointer-events: none;
+      transition: opacity 0.15s cubic-bezier(0, 0, 0.2, 1), transform 0.15s cubic-bezier(0, 0, 0.2, 1);
+      transform-origin: top right;
+    }
+
+    html.dark .m3-menu-dropdown {
+      background: var(--md-sys-color-surface-container-high);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+    }
+
+    .m3-menu-dropdown.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .m3-menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: none;
+      background: transparent;
+      color: var(--md-sys-color-on-surface);
+      font-family: inherit;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    .m3-menu-item:hover {
+      background: var(--md-sys-color-surface-container-highest);
+    }
+
+    .m3-menu-item.selected {
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+      font-weight: 700;
+    }
+
+    .m3-menu-item .check-icon {
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      color: var(--md-sys-color-primary);
+    }
+
+    .m3-menu-item.selected .check-icon {
+      opacity: 1;
     }
 
     .icon-btn {
@@ -810,11 +901,40 @@
         <a href="#features" class="nav-link hide-mobile" id="navFeatures">Features</a>
 
         <div class="controls-group">
-          <select id="langSelect" class="select-btn" autocomplete="off" aria-label="Select Language">
-            <option value="zh">🇨🇳 中文</option>
-            <option value="en" selected>🇺🇸 EN</option>
-            <option value="ja">🇯🇵 日本語</option>
-          </select>
+          <div class="m3-menu-anchor" id="langMenuAnchor">
+            <button type="button" class="m3-menu-btn" id="langMenuBtn" aria-haspopup="true" aria-expanded="false" aria-label="Select Language">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+              <span id="currentLangLabel">English</span>
+              <svg class="chevron-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+
+            <div class="m3-menu-dropdown" id="langDropdown" role="menu">
+              <button type="button" class="m3-menu-item" data-lang="zh" role="menuitem">
+                <span>简体中文</span>
+                <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </button>
+              <button type="button" class="m3-menu-item selected" data-lang="en" role="menuitem">
+                <span>English</span>
+                <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </button>
+              <button type="button" class="m3-menu-item" data-lang="ja" role="menuitem">
+                <span>日本語</span>
+                <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
 
           <button id="themeToggle" class="icon-btn" aria-label="Toggle Theme" title="Toggle Theme">
             <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1349,15 +1469,31 @@
 
     let currentLang = detectLanguage();
 
-    function syncLangSelect(lang) {
-      const sel = document.getElementById('langSelect');
-      if (!sel) return;
-      sel.value = lang;
-      for (let i = 0; i < sel.options.length; i++) {
-        const isMatch = sel.options[i].value === lang;
-        sel.options[i].selected = isMatch;
-        if (isMatch) sel.selectedIndex = i;
+    const langNames = {
+      zh: '简体中文',
+      en: 'English',
+      ja: '日本語'
+    };
+
+    function syncLangMenu(lang) {
+      const label = document.getElementById('currentLangLabel');
+      if (label && langNames[lang]) {
+        label.textContent = langNames[lang];
       }
+      document.querySelectorAll('.m3-menu-item').forEach((item) => {
+        const isSelected = item.getAttribute('data-lang') === lang;
+        item.classList.toggle('selected', isSelected);
+        item.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+      });
+    }
+
+    function toggleLangMenu(forceOpen) {
+      const btn = document.getElementById('langMenuBtn');
+      const dropdown = document.getElementById('langDropdown');
+      if (!btn || !dropdown) return;
+      const isOpen = forceOpen !== undefined ? forceOpen : !dropdown.classList.contains('open');
+      dropdown.classList.toggle('open', isOpen);
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     }
 
     function renderLanguage(lang, isUserAction = false) {
@@ -1415,26 +1551,51 @@
 
       switchShowcase(activeShowcaseIndex);
       applyDownloadUrls();
-      syncLangSelect(lang);
+      syncLangMenu(lang);
       document.documentElement.lang = lang === 'zh' ? 'zh-CN' : (lang === 'ja' ? 'ja' : 'en');
       document.documentElement.classList.remove('i18n-pending');
     }
 
-    const langSelectEl = document.getElementById('langSelect');
-    if (langSelectEl) {
-      langSelectEl.addEventListener('change', (e) => {
-        renderLanguage(e.target.value, true);
+    const langBtnEl = document.getElementById('langMenuBtn');
+    if (langBtnEl) {
+      langBtnEl.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleLangMenu();
       });
     }
+
+    document.querySelectorAll('.m3-menu-item').forEach((item) => {
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const selectedLang = item.getAttribute('data-lang');
+        if (selectedLang) {
+          renderLanguage(selectedLang, true);
+          toggleLangMenu(false);
+        }
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      const anchor = document.getElementById('langMenuAnchor');
+      if (anchor && !anchor.contains(e.target)) {
+        toggleLangMenu(false);
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        toggleLangMenu(false);
+      }
+    });
 
     renderLanguage(currentLang, false);
 
     window.addEventListener('DOMContentLoaded', () => {
-      syncLangSelect(currentLang);
+      syncLangMenu(currentLang);
       applyDownloadUrls();
     });
     window.addEventListener('pageshow', () => {
-      syncLangSelect(currentLang);
+      syncLangMenu(currentLang);
       applyDownloadUrls();
     });
 
