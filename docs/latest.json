@@ -1,11 +1,11 @@
 {
-  "version": "1.1.0",
-  "tag": "v1.1.0",
-  "name": "0rhxPlayer v1.1.0",
-  "releaseDate": "2026-10-10",
-  "htmlUrl": "https://github.com/RinCynar/0rhxPlayer-Desktop/releases/tag/v1.1.0",
+  "version": "1.1.1",
+  "tag": "v1.1.1",
+  "name": "0rhxPlayer v1.1.1",
+  "releaseDate": "2026-10-11",
+  "htmlUrl": "https://github.com/RinCynar/0rhxPlayer-Desktop/releases/tag/v1.1.1",
   "downloads": {
-    "windows_x64_exe": "https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.0/0rhxPlayer-v1.1.0-windows-x64-setup.exe",
-    "windows_x64_zip": "https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.0/0rhxPlayer-v1.1.0-windows-x64-portable.zip"
+    "windows_x64_exe": "https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.1/0rhxPlayer-v1.1.1-windows-x64-setup.exe",
+    "windows_x64_zip": "https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.1/0rhxPlayer-v1.1.1-windows-x64-portable.zip"
   }
 }
