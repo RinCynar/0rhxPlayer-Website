@@ -6,6 +6,12 @@
   "htmlUrl": "https://github.com/RinCynar/0rhxPlayer-Desktop/releases/tag/v1.1.1",
   "downloads": {
     "windows_x64_exe": "https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.1/0rhxPlayer-v1.1.1-windows-x64-setup.exe",
-    "windows_x64_zip": "https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.1/0rhxPlayer-v1.1.1-windows-x64-portable.zip"
+    "windows_x64_zip": "https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.1/0rhxPlayer-v1.1.1-windows-x64-portable.zip",
+    "windows_arm64_exe": "https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.1/0rhxPlayer-v1.1.1-windows-arm64-setup.exe",
+    "windows_arm64_zip": "https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.1/0rhxPlayer-v1.1.1-windows-arm64-portable.zip",
+    "linux_x64_appimage": "https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.1/0rhxPlayer-v1.1.1-linux-x64.AppImage",
+    "linux_x64_tar": "https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.1/0rhxPlayer-v1.1.1-linux-x64-portable.tar.gz",
+    "linux_arm64_appimage": "https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.1/0rhxPlayer-v1.1.1-linux-arm64.AppImage",
+    "linux_arm64_tar": "https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.1/0rhxPlayer-v1.1.1-linux-arm64-portable.tar.gz"
   }
 }

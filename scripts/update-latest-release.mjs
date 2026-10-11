@@ -42,26 +42,51 @@ async function main() {
   const htmlUrl = release.html_url || release.url || `https://github.com/RinCynar/0rhxPlayer-Desktop/releases/tag/${tagName}`;
 
   const assets = release.assets || [];
-  let exeUrl = '';
-  let zipUrl = '';
+  const downloads = {
+    windows_x64_exe: '',
+    windows_x64_zip: '',
+    windows_arm64_exe: '',
+    windows_arm64_zip: '',
+    linux_x64_appimage: '',
+    linux_x64_tar: '',
+    linux_arm64_appimage: '',
+    linux_arm64_tar: ''
+  };
 
   for (const asset of assets) {
-    const assetName = asset.name || '';
+    const assetName = (asset.name || '').toLowerCase();
     const downloadUrl = asset.browser_download_url || asset.url || '';
-    if (assetName.endsWith('.exe')) {
-      exeUrl = downloadUrl;
-    } else if (assetName.endsWith('.zip')) {
-      zipUrl = downloadUrl;
+    if (!downloadUrl) continue;
+
+    if (assetName.includes('windows') || assetName.includes('win')) {
+      if (assetName.includes('arm64')) {
+        if (assetName.endsWith('.exe')) downloads.windows_arm64_exe = downloadUrl;
+        else if (assetName.endsWith('.zip')) downloads.windows_arm64_zip = downloadUrl;
+      } else {
+        if (assetName.endsWith('.exe')) downloads.windows_x64_exe = downloadUrl;
+        else if (assetName.endsWith('.zip')) downloads.windows_x64_zip = downloadUrl;
+      }
+    } else if (assetName.includes('linux')) {
+      if (assetName.includes('arm64')) {
+        if (assetName.endsWith('.appimage')) downloads.linux_arm64_appimage = downloadUrl;
+        else if (assetName.endsWith('.tar.gz') || assetName.endsWith('.tgz')) downloads.linux_arm64_tar = downloadUrl;
+      } else {
+        if (assetName.endsWith('.appimage')) downloads.linux_x64_appimage = downloadUrl;
+        else if (assetName.endsWith('.tar.gz') || assetName.endsWith('.tgz')) downloads.linux_x64_tar = downloadUrl;
+      }
     }
   }
 
   // Fallback to standard release naming pattern if asset download URLs are empty
-  if (!exeUrl) {
-    exeUrl = `https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/${tagName}/0rhxPlayer-${tagName}-windows-x64-setup.exe`;
-  }
-  if (!zipUrl) {
-    zipUrl = `https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/${tagName}/0rhxPlayer-${tagName}-windows-x64-portable.zip`;
-  }
+  const base = `https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/${tagName}`;
+  if (!downloads.windows_x64_exe) downloads.windows_x64_exe = `${base}/0rhxPlayer-${tagName}-windows-x64-setup.exe`;
+  if (!downloads.windows_x64_zip) downloads.windows_x64_zip = `${base}/0rhxPlayer-${tagName}-windows-x64-portable.zip`;
+  if (!downloads.windows_arm64_exe) downloads.windows_arm64_exe = `${base}/0rhxPlayer-${tagName}-windows-arm64-setup.exe`;
+  if (!downloads.windows_arm64_zip) downloads.windows_arm64_zip = `${base}/0rhxPlayer-${tagName}-windows-arm64-portable.zip`;
+  if (!downloads.linux_x64_appimage) downloads.linux_x64_appimage = `${base}/0rhxPlayer-${tagName}-linux-x64.AppImage`;
+  if (!downloads.linux_x64_tar) downloads.linux_x64_tar = `${base}/0rhxPlayer-${tagName}-linux-x64-portable.tar.gz`;
+  if (!downloads.linux_arm64_appimage) downloads.linux_arm64_appimage = `${base}/0rhxPlayer-${tagName}-linux-arm64.AppImage`;
+  if (!downloads.linux_arm64_tar) downloads.linux_arm64_tar = `${base}/0rhxPlayer-${tagName}-linux-arm64-portable.tar.gz`;
 
   const newData = {
     version,
@@ -69,10 +94,7 @@ async function main() {
     name,
     releaseDate,
     htmlUrl,
-    downloads: {
-      windows_x64_exe: exeUrl,
-      windows_x64_zip: zipUrl
-    }
+    downloads
   };
 
   const newContent = JSON.stringify(newData, null, 2) + '\n';

@@ -493,15 +493,27 @@
     /* Cards Grid */
     .download-cards-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 28px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 1080px) {
+      .download-cards-grid {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .download-cards-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .m3-card {
       background: var(--md-sys-color-surface-container-low);
       border: 1px solid var(--md-sys-color-outline-variant);
       border-radius: 28px;
-      padding: 32px;
+      padding: 28px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -512,6 +524,54 @@
       border-color: var(--md-sys-color-primary);
       transform: translateY(-2px);
       box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.12);
+    }
+
+    .m3-arch-picker {
+      margin-bottom: 22px;
+    }
+
+    .m3-arch-group {
+      display: flex;
+      background: var(--md-sys-color-surface-container);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: 12px;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .m3-arch-btn {
+      flex: 1;
+      padding: 7px 10px;
+      border-radius: 9px;
+      border: none;
+      background: transparent;
+      color: var(--md-sys-color-on-surface-variant);
+      font-family: inherit;
+      font-size: 0.775rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s cubic-bezier(0.2, 0, 0, 1);
+      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .m3-arch-btn:hover {
+      color: var(--md-sys-color-on-surface);
+    }
+
+    .m3-arch-btn.active {
+      background: var(--md-sys-color-surface-container-lowest);
+      color: var(--md-sys-color-primary);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      font-weight: 700;
+    }
+
+    html.dark .m3-arch-btn.active {
+      background: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-primary);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
     }
 
     .card-head {
@@ -563,7 +623,7 @@
       font-size: 0.875rem;
       color: var(--md-sys-color-on-surface-variant);
       line-height: 1.6;
-      margin-bottom: 28px;
+      margin-bottom: 16px;
     }
 
     /* M3 Button Styles */
@@ -951,7 +1011,7 @@
     <section class="container hero">
       <div class="hero-badge">
         <span class="hero-dot"></span>
-        <span id="heroBadge">Qt 6 Native v1.1.0 Released</span>
+        <span id="heroBadge">Qt 6 Native Multi-Platform v1.1.1 Released</span>
       </div>
       <h1 id="heroHeadline">Clean & Pleasant<br />Local Music Experience</h1>
       <p id="heroDesc">Built natively with Qt 6 (C++ / Qt Quick) and WASAPI exclusive output for lightweight performance and pure local audio playback.</p>
@@ -985,31 +1045,40 @@
 
       <!-- Download Cards -->
       <div class="download-cards-grid">
-        <!-- 1. Desktop Card -->
+        <!-- 1. Windows Card -->
         <div class="m3-card">
           <div>
             <div class="card-head">
               <div class="card-brand">
                 <div class="card-icon-box">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="20" height="14" x="2" y="3" rx="2"></rect>
-                    <line x1="8" x2="16" y1="21" y2="21"></line>
-                    <line x1="12" x2="12" y1="17" y2="21"></line>
+                    <rect x="3" y="3" width="8" height="8" rx="1"></rect>
+                    <rect x="13" y="3" width="8" height="8" rx="1"></rect>
+                    <rect x="3" y="13" width="8" height="8" rx="1"></rect>
+                    <rect x="13" y="13" width="8" height="8" rx="1"></rect>
                   </svg>
                 </div>
                 <div>
-                  <h3 id="desktopCardTitle">0rhxPlayer Desktop</h3>
-                  <p id="desktopCardSub">Native Qt 6 Client for Windows & Linux</p>
+                  <h3 id="winCardTitle">0rhxPlayer for Windows</h3>
+                  <p id="winCardSub">Windows 10 / 11 · x64 & ARM64</p>
                 </div>
               </div>
-              <span id="desktopTag" class="tag-badge">v1.1.0</span>
+              <span id="winTag" class="tag-badge">v1.1.1</span>
             </div>
-            <p class="card-desc" id="desktopCardDesc">Native Qt 6 client with low latency WASAPI exclusive audio engine and 10-band equalizer.</p>
+            <p class="card-desc" id="winCardDesc">Native Qt 6 client with bit-perfect WASAPI exclusive audio and 10-band equalizer.</p>
+
+            <!-- Arch Selector -->
+            <div class="m3-arch-picker">
+              <div class="m3-arch-group">
+                <button type="button" class="m3-arch-btn active" id="winArchBtnX64" onclick="setWinArch('x64')">x64 (Intel / AMD)</button>
+                <button type="button" class="m3-arch-btn" id="winArchBtnArm64" onclick="setWinArch('arm64')">ARM64</button>
+              </div>
+            </div>
           </div>
 
           <div class="card-actions">
             <div class="btn-row">
-              <a id="winExeBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.0/0rhxPlayer-v1.1.0-windows-x64-setup.exe" target="_blank" class="btn-m3 btn-m3-filled">
+              <a id="winExeBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.1/0rhxPlayer-v1.1.1-windows-x64-setup.exe" target="_blank" class="btn-m3 btn-m3-filled">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                   <polyline points="7 10 12 15 17 10"></polyline>
@@ -1017,15 +1086,15 @@
                 </svg>
                 <span id="btnWinExe">Installer (.exe)</span>
               </a>
-              <a id="winZipBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.0/0rhxPlayer-v1.1.0-windows-x64-portable.zip" target="_blank" class="btn-m3 btn-m3-tonal">
+              <a id="winZipBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.1/0rhxPlayer-v1.1.1-windows-x64-portable.zip" target="_blank" class="btn-m3 btn-m3-tonal">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                 </svg>
                 <span id="btnWinZip">Portable (.zip)</span>
               </a>
             </div>
-            <a id="desktopRepoBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases" target="_blank" class="btn-m3 btn-m3-text">
-              <span id="btnDesktopRepo">View Releases on GitHub</span>
+            <a id="winRepoBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases" target="_blank" class="btn-m3 btn-m3-text">
+              <span id="btnWinRepo">View Windows Releases</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                 <polyline points="15 3 21 3 21 9"></polyline>
@@ -1035,7 +1104,64 @@
           </div>
         </div>
 
-        <!-- 2. VSCode Extension Card -->
+        <!-- 2. Linux Card -->
+        <div class="m3-card">
+          <div>
+            <div class="card-head">
+              <div class="card-brand">
+                <div class="card-icon-box">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="4 17 10 11 4 5"></polyline>
+                    <line x1="12" y1="19" x2="20" y2="19"></line>
+                  </svg>
+                </div>
+                <div>
+                  <h3 id="linuxCardTitle">0rhxPlayer for Linux</h3>
+                  <p id="linuxCardSub">Ubuntu, Debian, Arch · x64 & ARM64</p>
+                </div>
+              </div>
+              <span id="linuxTag" class="tag-badge">v1.1.1</span>
+            </div>
+            <p class="card-desc" id="linuxCardDesc">Native Qt 6 client with standalone AppImage bundle and ALSA/PulseAudio pipeline.</p>
+
+            <!-- Arch Selector -->
+            <div class="m3-arch-picker">
+              <div class="m3-arch-group">
+                <button type="button" class="m3-arch-btn active" id="linuxArchBtnX64" onclick="setLinuxArch('x64')">x64 (Intel / AMD)</button>
+                <button type="button" class="m3-arch-btn" id="linuxArchBtnArm64" onclick="setLinuxArch('arm64')">ARM64</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <div class="btn-row">
+              <a id="linuxAppImageBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.1/0rhxPlayer-v1.1.1-linux-x64.AppImage" target="_blank" class="btn-m3 btn-m3-filled">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span id="btnLinuxAppImage">AppImage</span>
+              </a>
+              <a id="linuxTarBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.1/0rhxPlayer-v1.1.1-linux-x64-portable.tar.gz" target="_blank" class="btn-m3 btn-m3-tonal">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                </svg>
+                <span id="btnLinuxTar">Portable (.tar.gz)</span>
+              </a>
+            </div>
+            <a id="linuxRepoBtn" href="https://github.com/RinCynar/0rhxPlayer-Desktop/releases" target="_blank" class="btn-m3 btn-m3-text">
+              <span id="btnLinuxRepo">View Linux Releases</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- 3. VSCode Extension Card -->
         <div class="m3-card">
           <div>
             <div class="card-head">
@@ -1054,6 +1180,13 @@
               <span class="tag-badge">Extension</span>
             </div>
             <p class="card-desc" id="vscodeCardDesc">Status bar playback controller with sidebar library and playlists for focused coding.</p>
+
+            <!-- Spacer Arch Picker to keep visual alignment -->
+            <div class="m3-arch-picker" style="visibility: hidden; pointer-events: none;" aria-hidden="true">
+              <div class="m3-arch-group">
+                <span class="m3-arch-btn">&nbsp;</span>
+              </div>
+            </div>
           </div>
 
           <div class="card-actions">
@@ -1208,21 +1341,27 @@
         navDownloads: "下载中心",
         navScreenshots: "界面预览",
         navFeatures: "功能特性",
-        heroBadge: "Qt 6 原生版 v1.1.0 现已发布",
+        heroBadge: "Qt 6 原生多平台版 v1.1.1 现已发布",
         heroHeadline: "简洁清爽的<br />本地音乐播放体验",
         heroDesc: "基于 Qt 6（C++ / Qt Quick）原生构建，搭载 WASAPI 独占输出与 10 段均衡器，低资源占用，纯净聆听本地音频。",
         dlSectionTitle: "获取客户端与扩展",
-        dlSectionSub: "选择适合您平台的桌面应用或编辑器插件",
+        dlSectionSub: "原生支持 Windows、Linux 与 VSCode，覆盖 x64 与 ARM64 双架构",
         mirrorOfficialLabel: "GitHub 官方源",
         mirrorProxyLabel: "git.rincynar.top 镜像源",
         mirrorHintOfficial: "当前使用 GitHub 官方源下载，若连接缓慢可切换为镜像源",
         mirrorHintProxy: "当前已启用 git.rincynar.top 镜像源加速下载",
-        desktopCardTitle: "0rhxPlayer 桌面端",
-        desktopCardSub: "Windows & Linux 原生 Qt 6 客户端",
-        desktopCardDesc: "原生 Qt 6 构建，支持 WASAPI 独占低延迟输出、10 段均衡器调节与无损音频解码。",
+        winCardTitle: "0rhxPlayer for Windows",
+        winCardSub: "Windows 10 / 11 · x64 & ARM64",
+        winCardDesc: "原生 Qt 6 构建，搭载 WASAPI 独占输出、10 段均衡器与无损音频解码。",
         btnWinExe: "安装包 (.exe)",
         btnWinZip: "便携版 (.zip)",
-        btnDesktopRepo: "查看全部版本与源码",
+        btnWinRepo: "查看 Windows 发行版本",
+        linuxCardTitle: "0rhxPlayer for Linux",
+        linuxCardSub: "Ubuntu, Debian, Arch · x64 & ARM64",
+        linuxCardDesc: "原生 Qt 6 构建，提供独立 AppImage 与便携归档，直连 Linux 音频管线。",
+        btnLinuxAppImage: "AppImage 运行包",
+        btnLinuxTar: "便携归档 (.tar.gz)",
+        btnLinuxRepo: "查看 Linux 发行版本",
         vscodeCardTitle: "0rhxPlayer for VSCode",
         vscodeCardSub: "VSCode 编辑器轻量扩展",
         vscodeCardDesc: "状态栏常驻控制器、侧边栏本地曲库与播放队列，沉浸编码无需切屏。",
@@ -1261,21 +1400,27 @@
         navDownloads: "Downloads",
         navScreenshots: "Screenshots",
         navFeatures: "Features",
-        heroBadge: "Qt 6 Native v1.1.0 Released",
+        heroBadge: "Qt 6 Native Multi-Platform v1.1.1 Released",
         heroHeadline: "Clean & Pleasant<br />Local Music Experience",
         heroDesc: "Built natively with Qt 6 (C++ / Qt Quick) and WASAPI exclusive output for lightweight performance and pure local audio playback.",
         dlSectionTitle: "Get 0rhxPlayer",
-        dlSectionSub: "Choose the app or extension for your platform",
+        dlSectionSub: "Native for Windows, Linux, and VSCode with x64 and ARM64 support",
         mirrorOfficialLabel: "GitHub Official",
         mirrorProxyLabel: "git.rincynar.top Mirror",
         mirrorHintOfficial: "Using GitHub direct downloads. Switch to mirror if downloads are slow",
         mirrorHintProxy: "Downloads accelerated via git.rincynar.top mirror",
-        desktopCardTitle: "0rhxPlayer Desktop",
-        desktopCardSub: "Native Qt 6 Client for Windows & Linux",
-        desktopCardDesc: "Native Qt 6 client with low latency WASAPI exclusive audio engine and 10-band equalizer.",
+        winCardTitle: "0rhxPlayer for Windows",
+        winCardSub: "Windows 10 / 11 · x64 & ARM64",
+        winCardDesc: "Native Qt 6 desktop client with bit-perfect WASAPI exclusive audio and 10-band equalizer.",
         btnWinExe: "Installer (.exe)",
         btnWinZip: "Portable (.zip)",
-        btnDesktopRepo: "View Releases on GitHub",
+        btnWinRepo: "View Windows Releases",
+        linuxCardTitle: "0rhxPlayer for Linux",
+        linuxCardSub: "Ubuntu, Debian, Arch · x64 & ARM64",
+        linuxCardDesc: "Native Qt 6 desktop client with standalone AppImage bundle and ALSA/PulseAudio audio pipeline.",
+        btnLinuxAppImage: "AppImage Bundle",
+        btnLinuxTar: "Portable (.tar.gz)",
+        btnLinuxRepo: "View Linux Releases",
         vscodeCardTitle: "0rhxPlayer for VSCode",
         vscodeCardSub: "Lightweight In-Editor Extension",
         vscodeCardDesc: "Status bar playback controller with sidebar library and playlists for focused coding.",
@@ -1314,21 +1459,27 @@
         navDownloads: "ダウンロード",
         navScreenshots: "スクリーンショット",
         navFeatures: "機能紹介",
-        heroBadge: "Qt 6 ネイティブ版 v1.1.0 リリース",
+        heroBadge: "Qt 6 ネイティブマルチプラットフォーム版 v1.1.1 リリース",
         heroHeadline: "シンプルで心地よい<br />ローカル音楽再生体験",
         heroDesc: "Qt 6（C++ / Qt Quick）と WASAPI 排他出力によりネイティブ構築され、軽快な動作とクリアな音質を提供します。",
         dlSectionTitle: "ダウンロード＆リリース",
-        dlSectionSub: "お使いのプラットフォームに合ったアプリと拡張機能",
+        dlSectionSub: "Windows、Linux、VSCode に対応、x64 および ARM64 ネイティブ提供",
         mirrorOfficialLabel: "GitHub 公式",
         mirrorProxyLabel: "git.rincynar.top ミラー",
         mirrorHintOfficial: "GitHub 公式から直接ダウンロードします。低速な場合はミラーに切り替えてください",
         mirrorHintProxy: "git.rincynar.top ミラーによるダウンロードが有効です",
-        desktopCardTitle: "0rhxPlayer デスクトップ版",
-        desktopCardSub: "Windows & Linux ネイティブ Qt 6 クライアント",
-        desktopCardDesc: "Qt 6 ネイティブ構築、WASAPI 排他出力、10バンドイコライザー、各種音響プリセットに対応。",
+        winCardTitle: "0rhxPlayer for Windows",
+        winCardSub: "Windows 10 / 11 · x64 & ARM64",
+        winCardDesc: "Qt 6 ネイティブ構築、WASAPI 排他出力、10バンドイコライザー、可逆音声再生に対応。",
         btnWinExe: "インストーラー (.exe)",
         btnWinZip: "ポータブル版 (.zip)",
-        btnDesktopRepo: "GitHub で全リリースを見る",
+        btnWinRepo: "Windows 版の全リリースを見る",
+        linuxCardTitle: "0rhxPlayer for Linux",
+        linuxCardSub: "Ubuntu, Debian, Arch · x64 & ARM64",
+        linuxCardDesc: "Qt 6 ネイティブ構築、単独動作 AppImage とポータブル版、Linux 音響直結。",
+        btnLinuxAppImage: "AppImage パッケージ",
+        btnLinuxTar: "ポータブル版 (.tar.gz)",
+        btnLinuxRepo: "Linux 版の全リリースを見る",
         vscodeCardTitle: "0rhxPlayer for VSCode",
         vscodeCardSub: "エディタ統合型軽量拡張機能",
         vscodeCardDesc: "ステータスバー常駐コントローラーとサイドバー曲庫、コーディングを邪魔しない軽量設計。",
@@ -1365,9 +1516,11 @@
     };
 
     // ========================
-    // 2. Global State & Mirror Manager
+    // 2. Global State & Mirror / Architecture Manager
     // ========================
     let currentMirror = localStorage.getItem('0rhx_download_mirror') || 'official';
+    let currentWinArch = 'x64';
+    let currentLinuxArch = 'x64';
     let releaseData = null;
 
     function toMirrorUrl(url) {
@@ -1379,19 +1532,65 @@
       }
     }
 
+    function setWinArch(arch) {
+      currentWinArch = arch;
+      const x64 = document.getElementById('winArchBtnX64');
+      const arm = document.getElementById('winArchBtnArm64');
+      if (x64) x64.classList.toggle('active', arch === 'x64');
+      if (arm) arm.classList.toggle('active', arch === 'arm64');
+      applyDownloadUrls();
+    }
+    window.setWinArch = setWinArch;
+
+    function setLinuxArch(arch) {
+      currentLinuxArch = arch;
+      const x64 = document.getElementById('linuxArchBtnX64');
+      const arm = document.getElementById('linuxArchBtnArm64');
+      if (x64) x64.classList.toggle('active', arch === 'x64');
+      if (arm) arm.classList.toggle('active', arch === 'arm64');
+      applyDownloadUrls();
+    }
+    window.setLinuxArch = setLinuxArch;
+
     function applyDownloadUrls() {
       const isProxy = currentMirror === 'proxy';
 
       const dl = releaseData && releaseData.downloads ? releaseData.downloads : {};
-      const exeBase = dl.windows_setup_exe || dl.windows_x64_exe || 'https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.0/0rhxPlayer-v1.1.0-windows-x64-setup.exe';
-      const zipBase = dl.windows_portable_zip || dl.windows_x64_zip || 'https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/v1.1.0/0rhxPlayer-v1.1.0-windows-x64-portable.zip';
+      const tag = (releaseData && releaseData.tag) || 'v1.1.1';
+      const base = `https://github.com/RinCynar/0rhxPlayer-Desktop/releases/download/${tag}`;
+
+      // Windows URLs
+      const winExe = currentWinArch === 'arm64'
+        ? (dl.windows_arm64_exe || `${base}/0rhxPlayer-${tag}-windows-arm64-setup.exe`)
+        : (dl.windows_x64_exe || `${base}/0rhxPlayer-${tag}-windows-x64-setup.exe`);
+
+      const winZip = currentWinArch === 'arm64'
+        ? (dl.windows_arm64_zip || `${base}/0rhxPlayer-${tag}-windows-arm64-portable.zip`)
+        : (dl.windows_x64_zip || `${base}/0rhxPlayer-${tag}-windows-x64-portable.zip`);
+
+      // Linux URLs
+      const linuxAppImage = currentLinuxArch === 'arm64'
+        ? (dl.linux_arm64_appimage || `${base}/0rhxPlayer-${tag}-linux-arm64.AppImage`)
+        : (dl.linux_x64_appimage || `${base}/0rhxPlayer-${tag}-linux-x64.AppImage`);
+
+      const linuxTar = currentLinuxArch === 'arm64'
+        ? (dl.linux_arm64_tar || `${base}/0rhxPlayer-${tag}-linux-arm64-portable.tar.gz`)
+        : (dl.linux_x64_tar || `${base}/0rhxPlayer-${tag}-linux-x64-portable.tar.gz`);
+
+      // VSCode URL
       const vsixBase = (releaseData && releaseData.vscode && releaseData.vscode.vsix) || 'https://github.com/RinCynar/0rhxPlayer-VSC/releases/latest';
 
       const winExeBtn = document.getElementById('winExeBtn');
-      if (winExeBtn) winExeBtn.href = toMirrorUrl(exeBase);
+      if (winExeBtn) winExeBtn.href = toMirrorUrl(winExe);
 
       const winZipBtn = document.getElementById('winZipBtn');
-      if (winZipBtn) winZipBtn.href = toMirrorUrl(zipBase);
+      if (winZipBtn) winZipBtn.href = toMirrorUrl(winZip);
+
+      const linuxAppImageBtn = document.getElementById('linuxAppImageBtn');
+      if (linuxAppImageBtn) linuxAppImageBtn.href = toMirrorUrl(linuxAppImage);
+
+      const linuxTarBtn = document.getElementById('linuxTarBtn');
+      if (linuxTarBtn) linuxTarBtn.href = toMirrorUrl(linuxTar);
 
       const vscodeVsixBtn = document.getElementById('vscodeVsixBtn');
       if (vscodeVsixBtn) vscodeVsixBtn.href = toMirrorUrl(vsixBase);
@@ -1517,12 +1716,21 @@
       if (document.getElementById('mirrorOfficialLabel')) document.getElementById('mirrorOfficialLabel').textContent = d.mirrorOfficialLabel;
       if (document.getElementById('mirrorProxyLabel')) document.getElementById('mirrorProxyLabel').textContent = d.mirrorProxyLabel;
 
-      if (document.getElementById('desktopCardTitle')) document.getElementById('desktopCardTitle').textContent = d.desktopCardTitle;
-      if (document.getElementById('desktopCardSub')) document.getElementById('desktopCardSub').textContent = d.desktopCardSub;
-      if (document.getElementById('desktopCardDesc')) document.getElementById('desktopCardDesc').textContent = d.desktopCardDesc;
+      // Windows Card
+      if (document.getElementById('winCardTitle')) document.getElementById('winCardTitle').textContent = d.winCardTitle;
+      if (document.getElementById('winCardSub')) document.getElementById('winCardSub').textContent = d.winCardSub;
+      if (document.getElementById('winCardDesc')) document.getElementById('winCardDesc').textContent = d.winCardDesc;
       if (document.getElementById('btnWinExe')) document.getElementById('btnWinExe').textContent = d.btnWinExe;
       if (document.getElementById('btnWinZip')) document.getElementById('btnWinZip').textContent = d.btnWinZip;
-      if (document.getElementById('btnDesktopRepo')) document.getElementById('btnDesktopRepo').textContent = d.btnDesktopRepo;
+      if (document.getElementById('btnWinRepo')) document.getElementById('btnWinRepo').textContent = d.btnWinRepo;
+
+      // Linux Card
+      if (document.getElementById('linuxCardTitle')) document.getElementById('linuxCardTitle').textContent = d.linuxCardTitle;
+      if (document.getElementById('linuxCardSub')) document.getElementById('linuxCardSub').textContent = d.linuxCardSub;
+      if (document.getElementById('linuxCardDesc')) document.getElementById('linuxCardDesc').textContent = d.linuxCardDesc;
+      if (document.getElementById('btnLinuxAppImage')) document.getElementById('btnLinuxAppImage').textContent = d.btnLinuxAppImage;
+      if (document.getElementById('btnLinuxTar')) document.getElementById('btnLinuxTar').textContent = d.btnLinuxTar;
+      if (document.getElementById('btnLinuxRepo')) document.getElementById('btnLinuxRepo').textContent = d.btnLinuxRepo;
 
       if (document.getElementById('vscodeCardTitle')) document.getElementById('vscodeCardTitle').textContent = d.vscodeCardTitle;
       if (document.getElementById('vscodeCardSub')) document.getElementById('vscodeCardSub').textContent = d.vscodeCardSub;
@@ -1638,12 +1846,23 @@
         if (res.ok) {
           releaseData = await res.json();
           if (releaseData.tag) {
-            const tagEl = document.getElementById('desktopTag');
-            if (tagEl) tagEl.textContent = releaseData.tag;
+            const winTagEl = document.getElementById('winTag');
+            if (winTagEl) winTagEl.textContent = releaseData.tag;
+            const linuxTagEl = document.getElementById('linuxTag');
+            if (linuxTagEl) linuxTagEl.textContent = releaseData.tag;
+          }
+          if (releaseData.version) {
+            const heroEl = document.getElementById('heroBadge');
+            if (heroEl) {
+              const d = I18N[currentLang] || I18N.en;
+              heroEl.textContent = d.heroBadge.replace('v1.1.1', 'v' + releaseData.version);
+            }
           }
           if (releaseData.htmlUrl) {
-            const repoEl = document.getElementById('desktopRepoBtn');
-            if (repoEl) repoEl.href = releaseData.htmlUrl;
+            const winRepoEl = document.getElementById('winRepoBtn');
+            if (winRepoEl) winRepoEl.href = releaseData.htmlUrl;
+            const linuxRepoEl = document.getElementById('linuxRepoBtn');
+            if (linuxRepoEl) linuxRepoEl.href = releaseData.htmlUrl;
           }
         }
       } catch (e) {
